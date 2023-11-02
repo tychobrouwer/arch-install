@@ -27,19 +27,16 @@
   },
   "memory": {
     "format": "󰍛 {}%",
-    "format-alt": "󰍛 {used}/{total} GiB",
     "interval": 5
   },
   "cpu": {
     "format": "󰻠 {usage}%",
-    "format-alt": "󰻠 {avg_frequency} GHz",
     "interval": 5
   },
   "disk": {
     "format": "󰋊 {}%",
-    "format-alt": "󰋊 {used}/{total} GiB",
     "interval": 5,
-    "path": "/mnt/Datos"
+    "path": "/"
   },
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
@@ -69,7 +66,6 @@
     "bat": "BAT2"
   },
   "pulseaudio": {
-    // "scroll-step": 1, // %, can be a float
     "format": "{volume}% {icon} {format_source}",
     "format-bluetooth": "{volume}% {icon} {format_source}",
     "format-bluetooth-muted": " {icon} {format_source}",
@@ -88,7 +84,6 @@
         "",
         ""
       ]
-    },
-    "on-click": "pavucontrol"
+    }
   }
 }
