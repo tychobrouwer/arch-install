@@ -106,14 +106,16 @@ Current=tokyo-night-sddm
 Install `otf-font-awesome` font and `waybar`:
 
 ```sh
-sudo pacman -Sy waybar otf-font-awesome lm_sensors
+sudo pacman -Sy waybar otf-font-awesome lm_sensors ttc-iosevka-ss15
 sensors-detect
 ```
 
 Configure waybar:
 
 ```sh
-
+git clone https://github.com/TychoBrouwer/arch-install.git $HOME/Repositories/
+ln -s $HOME/Repositories/arch-install/dotfiles/waybar /etc/xdg/waybar/config
+ln -s $HOME/Repositories/arch-install/dotfiles/waybar.css /etc/xdg/waybar/style.css
 ```
 
 ## Install zsh and oh-my-zsh

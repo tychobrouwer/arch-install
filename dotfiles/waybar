@@ -7,12 +7,7 @@
   "margin-right": 0,
   "height": 30,
   "spacing": 4,
-  "modules-left": [
-    "sway/workspaces",
-    "sway/mode",
-    "sway/scratchpad",
-    "custom/media"
-  ],
+  "modules-left": [],
   "modules-center": [
     "custom/clock"
   ],
@@ -25,41 +20,8 @@
     "battery",
     "battery#bat2"
   ],
-  "keyboard-state": {
-    "numlock": true,
-    "capslock": true,
-    "format": "{name} {icon}",
-    "format-icons": {
-      "locked": "",
-      "unlocked": ""
-    }
-  },
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
-  },
-  "sway/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": [
-      "",
-      ""
-    ],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
-  },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    }
-  },
-  "tray": {
-    // "icon-size": 21,
-    "spacing": 10
-  },
   "custom/clock": {
-    "exec": "date +'%a %d %b - %H:%M'",
+    "exec": "date +'%a  %d  %b  -  %H:%M'",
     "interval": 1,
     "tooltip": false
   },
