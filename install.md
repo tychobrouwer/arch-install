@@ -145,3 +145,13 @@ sudo pacman -Sy zsh
 ZSH="$HOME/Repositories/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 chsh $USER -s $(which zsh)
 ```
+
+## Install KDE Plasma theme
+
+Get the theme:
+
+```sh
+git clone https://github.com/TychoBrouwer/kde-theme.git $HOME/Repositories/kde-theme
+cd $HOME/Repositories/kde-theme
+sudo ./install.sh
+```
