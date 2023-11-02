@@ -21,10 +21,7 @@ window#waybar {
 #network,
 #pulseaudio,
 #custom-clock {
-  margin: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  padding: 2px;
+  margin: 5px 10px;
   font-weight: bold;
 }
 
