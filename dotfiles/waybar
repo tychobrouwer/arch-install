@@ -26,7 +26,7 @@
     "tooltip": false
   },
   "memory": {
-    "format": "󰍛 {}%",
+    "format": " {}%",
     "tooltip": false,
     "interval": 5
   },
@@ -36,7 +36,7 @@
     "interval": 5
   },
   "disk": {
-    "format": "󰋊 {}%",
+    "format": " {}%",
     "interval": 5,
     "tooltip": false,
     "path": "/"
