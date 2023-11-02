@@ -88,19 +88,6 @@ Install packages
 sudo pacman -Syu git neofeth
 ```
 
-## Install SDDM theme
-
-```sh
-sudo git clone https://github.com/rototrash/tokyo-night-sddm.git /usr/share/sddm/themes/tokyo-night-sddm
-```
-
-Edit the `/etc/sddm.conf` file and set the following options:
-
-```sh title="/etc/sddm.conf"
-[Theme]
-Current=tokyo-night-sddm
-```
-
 ## Configure dot files
 
 Configure dot files:
@@ -154,4 +141,40 @@ Get the theme:
 git clone https://github.com/TychoBrouwer/kde-theme.git $HOME/Repositories/kde-theme
 cd $HOME/Repositories/kde-theme
 sudo ./install.sh
+
+sudo pacman -Sy kvantum
+```
+
+Edit the `/etc/sddm.conf` file and set the following options:
+
+```sh title="/etc/sddm.conf"
+[Theme]
+Current=my-theme
+```
+
+Mannually configure the background image.
+
+## Congifure SSH
+
+Install and enable SSH:
+
+```sh
+sudo pacman -Sy openssh
+sudo systemctl enable sshd
+sudo systemctl start sshd
+```
+
+Generate SSH keys:
+
+```sh
+ssh-keygen -t ed25519 -a 100
+```
+
+## Configure git
+
+Configure git:
+
+```sh
+git config --global user.name "Tycho Brouwer"
+git config --global user.email ""
 ```
