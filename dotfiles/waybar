@@ -27,18 +27,22 @@
   },
   "memory": {
     "format": "󰍛 {}%",
+    "tooltip": false,
     "interval": 5
   },
   "cpu": {
-    "format": "󰻠 {usage}%",
+    "format": "\f2db {usage}%",
+    "tooltip": false,
     "interval": 5
   },
   "disk": {
     "format": "󰋊 {}%",
     "interval": 5,
+    "tooltip": false,
     "path": "/"
   },
   "network": {
+    "tooltip": false,
     "format-wifi": "{essid} ({signalStrength}%) ",
     "format-ethernet": "{ipaddr}/{cidr} ",
     "format-linked": "{ifname} (No IP) ",
@@ -66,6 +70,7 @@
     "bat": "BAT2"
   },
   "pulseaudio": {
+    "tooltip": false,
     "format": "{volume}% {icon} {format_source}",
     "format-bluetooth": "{volume}% {icon} {format_source}",
     "format-bluetooth-muted": " {icon} {format_source}",
