@@ -31,7 +31,7 @@
     "interval": 5
   },
   "cpu": {
-    "format": "\f2db {usage}%",
+    "format": "U+f2db {usage}%",
     "tooltip": false,
     "interval": 5
   },
