@@ -5,7 +5,7 @@
 Update `archlinux-keyring` and `archinstall` packages:
 
 ```sh
-pacman -Sy archlinux-keyring archinstall
+sudo pacman -Sy archlinux-keyring archinstall
 ```
 
 Edit `/etc/pacman.conf` and add the following line:
@@ -80,14 +80,6 @@ When = PostTransaction
 Exec = /usr/bin/systemctl restart systemd-boot-update.service
 ```
 
-## Basic configuration
-
-Install packages
-
-```sh
-sudo pacman -Syu git neofeth
-```
-
 ## Configure dot files
 
 Configure dot files:
@@ -145,11 +137,12 @@ sudo ./install.sh
 sudo pacman -Sy kvantum
 ```
 
-Edit the `/etc/sddm.conf` file and set the following options:
+Edit the `/etc/sddm.conf.d/kde_settings.conf` file and set the following options:
 
-```sh title="/etc/sddm.conf"
+```sh title="/etc/sddm.conf.d/kde_settings.conf"
 [Theme]
 Current=my-theme
+CursorTheme=breeze_cursors
 ```
 
 Mannually configure the background image.
@@ -167,7 +160,7 @@ sudo systemctl start sshd
 Generate SSH keys:
 
 ```sh
-ssh-keygen -t ed25519 -a 100
+ssh-keygen -q -t ed25519 -a 100 -f $HOME/.ssh/id_ed25519 -N ''
 ```
 
 ## Configure git
@@ -177,4 +170,44 @@ Configure git:
 ```sh
 git config --global user.name "Tycho Brouwer"
 git config --global user.email ""
+```
+
+## Configure paru
+
+Install `paru`:
+
+```sh
+git clone https://aur.archlinux.org/paru.git $HOME/Repositories/paru
+cd $HOME/Repositories/paru
+makepkg -si
+```
+
+## Install Steam
+
+Install `steam`:
+
+```sh
+sudo pacman -Sy ttf-liberation steam
+```
+
+## Basic configuration
+
+Install packages
+
+```sh
+sudo pacman -Sy neofeth code
+sudo paru -Sy thorium-browser-bin
+```
+
+To set time locale to 24h format, change `etc/locale.gen` and uncomment the following line:
+
+```sh title="/etc/locale.gen"
+en_GB.UTF-8 UTF-8
+```
+
+Then run:
+
+```sh
+sudo locale-gen
+sudo localectl set-locale LC_TIME=en_GB.UTF-8
 ```
