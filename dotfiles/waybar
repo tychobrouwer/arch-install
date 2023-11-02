@@ -31,7 +31,7 @@
     "interval": 5
   },
   "cpu": {
-    "format": "U+f2db {usage}%",
+    "format": "█ {usage}%",
     "tooltip": false,
     "interval": 5
   },
