@@ -10,8 +10,7 @@
 
 window#waybar {
   background-color: #282828;
-  border-bottom: 1px solid #282828;
-  color: #f4d9e1;
+  color: #b59fda;
 }
 
 #cpu,

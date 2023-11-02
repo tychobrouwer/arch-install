@@ -101,21 +101,39 @@ Edit the `/etc/sddm.conf` file and set the following options:
 Current=tokyo-night-sddm
 ```
 
+## Configure dot files
+
+Configure dot files:
+
+```sh
+git clone https://github.com/TychoBrouwer/arch-install.git $HOME/Repositories/
+
+sudo cp -sf $HOME/Repositories/arch-install/dotfiles/waybar /etc/xdg/waybar/config
+sudo cp -sf $HOME/Repositories/arch-install/dotfiles/waybar.css /etc/xdg/waybar/style.css
+cp -sf $HOME/Repositories/arch-install/dotfiles/.zshrc $HOME/.zshrc
+```
+
 ## Install waybar
 
 Install `otf-font-awesome` font and `waybar`:
 
 ```sh
-sudo pacman -Sy waybar otf-font-awesome lm_sensors ttc-iosevka-ss15
+sudo pacman -Sy waybar lm_sensors otf-font-awesome ttc-iosevka-ss15
 sensors-detect
 ```
 
-Configure waybar:
+Add waybar to the startup applications:
 
 ```sh
-git clone https://github.com/TychoBrouwer/arch-install.git $HOME/Repositories/
-ln -s $HOME/Repositories/arch-install/dotfiles/waybar /etc/xdg/waybar/config
-ln -s $HOME/Repositories/arch-install/dotfiles/waybar.css /etc/xdg/waybar/style.css
+mkdir -p $HOME/.config/autostart
+
+cat << EOF > $HOME/.config/autostart/waybar.desktop
+[Desktop Entry]
+Exec=/bin/waybar
+Name=Waybar
+Type=Application
+X-KDE-AutostartScript=true
+EOF
 ```
 
 ## Install zsh and oh-my-zsh
