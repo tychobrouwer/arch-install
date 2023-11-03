@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -S --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 zsh kvantum openssh ttf-liberation steam neofeth code
+sudo pacman -S --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 zsh kvantum openssh ttf-liberation steam neofeth code papirus-icon-theme gimp
 
 # Install paru
 git clone https://aur.archlinux.org/paru.git /tmp/paru
@@ -105,6 +105,7 @@ sudo systemctl start sshd.service
 # Configure git
 git config --global user.name "$gitname"
 git config --global user.email "$gitemail"
+git config --global core.ignorecase false
 
 # Set hostname
 sudo hostnamectl set-hostname $hostnamevar
