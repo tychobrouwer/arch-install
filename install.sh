@@ -90,12 +90,15 @@ MinimumUid=1000
 EOF
 
 # Configure dotfiles
+$dotfilesdir = "$reposdir/arch-install/dotfiles"
 git clone https://github.com/TychoBrouwer/arch-install.git $reposdir/arch-install
 cd $reposdir/arch-install
 
-sudo cp -sf $reposdir/arch-install/dotfiles/waybar /etc/xdg/waybar/config
-sudo cp -sf $reposdir/arch-install/dotfiles/waybar.css /etc/xdg/waybar/style.css
-cp -sf $reposdir/arch-install/dotfiles/.zshrc $homedir/.zshrc
+sudo cp -sf $dotfilesdir/waybar /etc/xdg/waybar/config
+sudo cp -sf $dotfilesdir/waybar.css /etc/xdg/waybar/style.css
+cp -sf $dotfilesdir/.zshrc $homedir/.zshrc
+cp -sf $dotfilesdir/dolphinrc $homedir/.config/dolphinrc
+cp -sf $dotfilesdir/.directory-dolphin $homedir/.local/share/dolphin/view_properties/global/.directory
 
 # Enable and start sshd
 ssh-keygen -q -t ed25519 -a 100 -f $homedir/.ssh/id_ed25519 -N ''
@@ -111,6 +114,29 @@ git config --global core.ignorecase false
 sudo hostnamectl set-hostname $hostnamevar
 
 # Set kwinrc settings
-kwriteconfig5 --file $homedir/.config/kwinrc --group TabBox --key LayoutName thumbnail_grid
-kwriteconfig5 --file $homedir/.config/kwinrc --group Desktops --key Number 3
+kwriteconfig5 --file $homedir/.config/kwinrc --group Desktops --key Number 2
 kwriteconfig5 --file $homedir/.config/ktimezonedrc --group TimeZones --key LocalZone Europe/Amsterdam
+
+# Set nodisplay for applications from launcher
+$application_desktop_files = [
+  "/usr/share/applications/avahi-discover.desktop",
+  "/usr/share/applications/bssh.desktop",
+  "/usr/share/applications/bvnc.desktop",
+  "/usr/share/applications/assistent.desktop",
+  "/usr/share/applications/designer.desktop",
+  "/usr/share/applications/linquist.desktop",
+  "/usr/share/applications/qdbusviewer.desktop",
+  "/usr/share/applications/qv4l2.desktop",
+  "/usr/share/applications/qvidcap.desktop",
+  "/usr/share/applications/org.kde.plasma-welcome.desktop",
+  "/usr/share/applications/org.kde.kinfocenter.desktop",
+  "/usr/share/applications/org.kde.kuserfeedback-console.desktop",
+  "/usr/share/applications/thorium-shell.desktop",
+]
+
+for desktop_file in $application_desktop_files
+do
+  [ ! -f $desktop_file ] && continue
+  
+  sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
+done
