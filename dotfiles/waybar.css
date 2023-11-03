@@ -10,7 +10,7 @@
 
 window#waybar {
   background-color: #26292e;
-  color: #b59fda;
+  color: #dfdfdf;
   border-bottom: #454b50 1px solid;
 }
 
@@ -23,7 +23,6 @@ window#waybar {
 #custom-clock {
   margin: 5px 10px;
   font-weight: bold;
-  color: #b59fda;
 }
 
 #battery {
