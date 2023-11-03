@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -S --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 zsh kvantum openssh ttf-liberation steam neofeth code papirus-icon-theme gimp
+sudo pacman -S --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofeth code papirus-icon-theme gimp
 
 # Install paru
 git clone https://aur.archlinux.org/paru.git /tmp/paru
@@ -109,3 +109,8 @@ git config --global core.ignorecase false
 
 # Set hostname
 sudo hostnamectl set-hostname $hostnamevar
+
+# Set kwinrc settings
+kwriteconfig5 --file $homedir/.config/kwinrc --group TabBox --key LayoutName thumbnail_grid
+kwriteconfig5 --file $homedir/.config/kwinrc --group Desktops --key Number 3
+kwriteconfig5 --file $homedir/.config/ktimezonedrc --group TimeZones --key LocalZone Europe/Amsterdam

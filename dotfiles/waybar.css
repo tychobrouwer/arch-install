@@ -11,6 +11,8 @@
 window#waybar {
   background-color: #26292e;
   color: #b59fda;
+  border-bottom: #36383a 1px solid;
+  /* #454b50 */
 }
 
 #cpu,
