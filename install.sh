@@ -120,6 +120,7 @@ cp -sf "$dotfilesdir/.zshrc" "$homedir/.zshrc"
 cp -sf "$dotfilesdir/dolphinrc" "$homedir/.config/dolphinrc"
 mkdir -p "$homedir/.local/share/dolphin/view_properties/global"
 cp -sf "$dotfilesdir/.directory-dolphin" "$homedir/.local/share/dolphin/view_properties/global/.directory"
+cp -sf "$dotfilesdir/.kscreenlockerrc" "$homedir/.config/kscreenlockerrc"
 
 # Enable and start sshd
 ssh-keygen -q -t ed25519 -a 100 -f "$homedir/.ssh/id_ed25519" -N ''

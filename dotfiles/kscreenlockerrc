@@ -1,0 +1,6 @@
+[$Version]
+update_info=kscreenlocker.upd:0.1-autolock
+
+[Greeter][Wallpaper][org.kde.image][General]
+Image=/usr/share/wallpapers/my-theme/content/images/3820x2056.jpg
+PreviewImage=/usr/share/wallpapers/my-theme/content/images/3820x2056.jpg
