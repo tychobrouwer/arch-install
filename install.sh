@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -S --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofeth code papirus-icon-theme gimp
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofeth papirus-icon-theme gimp qbittorrent
 
 # Install paru
 git clone https://aur.archlinux.org/paru.git /tmp/paru
@@ -34,7 +34,7 @@ makepkg -si
 rm -rf /tmp/paru
 
 # Install paru packages
-sudo paru -S --needed thorium-browser-bin
+paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin
 
 # Get variables
 read -p 'Username: ' uservar
@@ -66,8 +66,12 @@ EOF
 
 # Enable kde plasma themes
 git clone https://github.com/TychoBrouwer/kde-theme.git $reposdir/kde-theme
-cd $reposdir/kde-theme
-sudo ./install.sh
+$reposdir/kde-theme/install.sh
+
+# Enable Dolphin folder color
+git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git $reposdir/papirus-folders
+$reposdir/papirus-folders/install.sh
+papirus-folders -C yaru --theme Papirus-Dark
 
 # Set sddm settings
 sudo cat << EOF > /etc/sddm.conf.d/kde_settings.conf
@@ -83,16 +87,16 @@ RebootCommand=/usr/bin/systemctl reboot
 [Theme]
 Current=my-theme
 CursorTheme=breeze_cursors
+Font=Noto Sans,10,-1,5,50,0,0,0,0,0
 
 [Users]
-MaximumUid=65000
+MaximumUid=60513
 MinimumUid=1000
 EOF
 
 # Configure dotfiles
 $dotfilesdir = "$reposdir/arch-install/dotfiles"
 git clone https://github.com/TychoBrouwer/arch-install.git $reposdir/arch-install
-cd $reposdir/arch-install
 
 sudo cp -sf $dotfilesdir/waybar /etc/xdg/waybar/config
 sudo cp -sf $dotfilesdir/waybar.css /etc/xdg/waybar/style.css
