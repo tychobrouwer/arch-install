@@ -40,14 +40,14 @@ fi
 paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin --noconfirm --skipreview
 
 # Get variables
-read -pr 'Username: ' uservar
-read -pr 'Hostname: ' hostnamevar
-read -pr 'Repositories directory name: ' reposdirvar
+read -p "Username: " uservar
+read -p "Hostname: " hostnamevar
+read -p "Repositories directory nam: " reposdirvar
 
 echo
 echo 'Enter git name and email ->'
-read -pr 'Git name: ' gitname
-read -pr 'Git email: ' gitemail
+read -p "Git name: " gitname
+read -p "Git email: " gitemail
 
 homedir="/home/$uservar"
 reposdir="$homedir/$reposdirvar"
