@@ -70,7 +70,7 @@ EOF
 # Enable kde plasma themes
 git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
 cd "$reposdir/kde-theme"
-./install.sh
+sudo ./install.sh
 
 # Enable Dolphin folder color
 git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "$reposdir/papirus-folders"
