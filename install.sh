@@ -40,8 +40,6 @@ fi
 paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin --noconfirm --skipreview
 
 # Get variables
-read -p "Username: " uservar
-read -p "Hostname: " hostnamevar
 read -p "Repositories directory nam: " reposdirvar
 
 echo
@@ -49,12 +47,12 @@ echo 'Enter git name and email ->'
 read -p "Git name: " gitname
 read -p "Git email: " gitemail
 
-homedir="/home/$uservar"
+homedir="/home/$USER"
 reposdir="$homedir/$reposdirvar"
 
 # Install oh-my-zsh
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-chsh "$uservar" -s "$(which zsh)"
+chsh "$USER" -s "$(which zsh)"
 
 # Enable waybar
 sudo sensors-detect
@@ -120,9 +118,6 @@ sudo systemctl start sshd.service
 git config --global user.name "$gitname"
 git config --global user.email "$gitemail"
 git config --global core.ignorecase false
-
-# Set hostname
-sudo hostnamectl set-hostname "$hostnamevar"
 
 # Set kwinrc settings
 kwriteconfig5 --file "$homedir/.config/kwinrc" --group Desktops --key Number 2
