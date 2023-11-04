@@ -75,6 +75,18 @@ git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "$reposd
 cd "$reposdir/papirus-folders"
 ./install.sh
 
+# Set Dolphin state (mainly for visible panels)
+cat << EOF > "$homedir/.local/share/dolphin/dolphinstaterc"
+[SettingsDialog]
+1280x800 screen: Height=521
+1280x800 screen: Width=634
+
+[State]
+1280x800 screen: Window-Maximized=true
+State=AAAA/wAAAAD9AAAAAwAAAAAAAAC0AAAClfwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAyAAABPgAAAFQA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAyAAAClQAAAF4A////AAAAAQAAALQAAAKV/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAADIAAAKVAAAAhgD///8AAAADAAAFAAAAAMz8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAAFAAAAAAIA////AAAESAAAApUAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAA=
+EOF
+
+# Set papirus folder theme
 papirus-folders -C yaru --theme Papirus-Dark
 
 # Set sddm settings
@@ -128,9 +140,9 @@ application_desktop_files=(
   "/usr/share/applications/avahi-discover.desktop"
   "/usr/share/applications/bssh.desktop"
   "/usr/share/applications/bvnc.desktop"
-  "/usr/share/applications/assistent.desktop"
+  "/usr/share/applications/assistant.desktop"
   "/usr/share/applications/designer.desktop"
-  "/usr/share/applications/linquist.desktop"
+  "/usr/share/applications/linguist.desktop"
   "/usr/share/applications/qdbusviewer.desktop"
   "/usr/share/applications/qv4l2.desktop"
   "/usr/share/applications/qvidcap.desktop"
