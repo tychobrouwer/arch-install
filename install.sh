@@ -25,13 +25,16 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofeth papirus-icon-theme gimp qbittorrent less curl wget --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget --noconfirm
 
 # Install paru
-git clone https://aur.archlinux.org/paru.git /tmp/paru
-cd /tmp/paru || exit
-makepkg -si
-rm -rf /tmp/paru
+if ! command -v paru &> /dev/null
+then
+  git clone https://aur.archlinux.org/paru.git /tmp/paru
+  cd /tmp/paru || exit
+  makepkg -si
+  rm -rf /tmp/paru
+fi
 
 # Install paru packages
 paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin --noconfirm --skipreview
