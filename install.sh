@@ -69,11 +69,14 @@ EOF
 
 # Enable kde plasma themes
 git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
-"$reposdir/kde-theme/install.sh"
+cd "$reposdir/kde-theme"
+./install.sh
 
 # Enable Dolphin folder color
 git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "$reposdir/papirus-folders"
-"$reposdir/papirus-folders/install.sh"
+cd "$reposdir/papirus-folders"
+./install.sh
+
 papirus-folders -C yaru --theme Papirus-Dark
 
 # Set sddm settings
@@ -105,6 +108,7 @@ sudo cp -sf "$dotfilesdir/waybar" "/etc/xdg/waybar/config"
 sudo cp -sf "$dotfilesdir/waybar.css" "/etc/xdg/waybar/style.css"
 cp -sf "$dotfilesdir/.zshrc" "$homedir/.zshrc"
 cp -sf "$dotfilesdir/dolphinrc" "$homedir/.config/dolphinrc"
+mkdir -p "$homedir/.local/share/dolphin/view_properties/global"
 cp -sf "$dotfilesdir/.directory-dolphin" "$homedir/.local/share/dolphin/view_properties/global/.directory"
 
 # Enable and start sshd
