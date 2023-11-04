@@ -5,7 +5,7 @@
 Update `archlinux-keyring` and `archinstall` packages:
 
 ```sh
-sudo pacman -Sy archlinux-keyring archinstall
+pacman -Sy archlinux-keyring archinstall
 ```
 
 Edit `/etc/pacman.conf` and add the following line:

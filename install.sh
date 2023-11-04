@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parallel downloads pacman
-sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 20' /etc/pacman.conf
+sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 10' /etc/pacman.conf
 
 # Create pacman hook for systemd-boot
 sudo mkdir -p /etc/pacman.d/hooks
@@ -18,14 +18,14 @@ Exec = /usr/bin/systemctl restart systemd-boot-update.service
 EOF"
 
 # Set locales and time format
-sudo sed -i '/en_US.UTF-8/c\en_US.UTF-8' /etc/locale.gen
-sudo sed -i '/en_GB.UTF-8/c\en_US.UTF-8' /etc/locale.gen
+sudo sed -i '/#en_US UTF-8/c\en_US UTF-8' /etc/locale.gen
+sudo sed -i '/#en_GB UTF-8/c\en_GB UTF-8' /etc/locale.gen
 sudo locale-gen
 sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofeth papirus-icon-theme gimp qbittorrent
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofeth papirus-icon-theme gimp qbittorrent less curl wget --noconfirm
 
 # Install paru
 git clone https://aur.archlinux.org/paru.git /tmp/paru
@@ -34,7 +34,7 @@ makepkg -si
 rm -rf /tmp/paru
 
 # Install paru packages
-paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin
+paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin --noconfirm --skipreview
 
 # Get variables
 read -pr 'Username: ' uservar
