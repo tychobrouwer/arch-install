@@ -18,6 +18,7 @@ window#waybar {
 #battery,
 #memory,
 #disk,
+#custom-spotify,
 #network,
 #pulseaudio,
 #custom-clock {

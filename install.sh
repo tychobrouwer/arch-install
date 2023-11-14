@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -37,7 +37,7 @@ then
 fi
 
 # Install paru packages
-paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin --noconfirm --skipreview
+paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify --noconfirm --skipreview
 
 # Get variables
 read -p "Repositories directory nam: " reposdirvar
@@ -54,10 +54,8 @@ reposdir="$homedir/$reposdirvar"
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 chsh "$USER" -s "$(which zsh)"
 
-wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
-
 # Enable waybar
-sudo sensors-detect
+# sudo sensors-detect
 mkdir -p "$homedir/.config/autostart"
 cat << EOF > "$homedir/.config/autostart/waybar.desktop"
 [Desktop Entry]
@@ -66,6 +64,9 @@ Name=Waybar
 Type=Application
 X-KDE-AutostartScript=true
 EOF
+
+sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
+sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
 # Enable kde plasma themes
 git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
@@ -123,6 +124,7 @@ cp -sf "$dotfilesdir/dolphinrc" "$homedir/.config/dolphinrc"
 mkdir -p "$homedir/.local/share/dolphin/view_properties/global"
 cp -sf "$dotfilesdir/.directory-dolphin" "$homedir/.local/share/dolphin/view_properties/global/.directory"
 cp -sf "$dotfilesdir/.kscreenlockerrc" "$homedir/.config/kscreenlockerrc"
+cp -sf "$dotfilesdir/pip.conf" "$homedir/.config/pip/pip.conf"
 
 # Enable and start sshd
 ssh-keygen -q -t ed25519 -a 100 -f "$homedir/.ssh/id_ed25519" -N ''
