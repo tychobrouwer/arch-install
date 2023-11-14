@@ -52,7 +52,11 @@ reposdir="$homedir/$reposdirvar"
 
 # Install oh-my-zsh
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-chsh "$USER" -s "$(which zsh)"
+
+if [ echo "$SHELL" != "$(which zsh)" ]
+then
+  chsh "$USER" -s "$(which zsh)"
+fi
 
 # Enable waybar
 # sudo sensors-detect
