@@ -6,7 +6,9 @@
   "margin-left": 0,
   "margin-right": 0,
   "spacing": 2,
-  "modules-left": [],
+  "modules-left": [
+    "custom/spotify"
+  ],
   "modules-center": [
     "custom/clock"
   ],
@@ -22,6 +24,14 @@
     "exec": "date +'%a  %d  %b  %Y  -  %H:%M'",
     "interval": 1,
     "tooltip": false
+  },
+  "custom/spotify": {
+    "exec": "/usr/bin/python3 /etc/xdg/waybar/mediaplayer.py --player spotify",
+    "format": "{}  ",
+    "return-type": "json",
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
   },
   "memory": {
     "format": " {}%",

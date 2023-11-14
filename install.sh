@@ -54,6 +54,8 @@ reposdir="$homedir/$reposdirvar"
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 chsh "$USER" -s "$(which zsh)"
 
+wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
+
 # Enable waybar
 sudo sensors-detect
 mkdir -p "$homedir/.config/autostart"
