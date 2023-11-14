@@ -70,10 +70,17 @@ EOF
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
+cat << EOF > "$homedir/.config/autostart/spotify.sh"
+#!/bin/bash
+spotify &
+while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
+xdotool search --onlyvisible --name spotify windowquit
+EOF
+
 cat << EOF > "$homedir/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Exec=spotify & sleep 0.2 && xdotool search --onlyvisible --name "spotify" windowquit
+Exec=$homedir/.config/autostart/spotify.sh
 GenericName=Music Player
 Icon=spotify-client
 MimeType=x-scheme-handler/spotify;
