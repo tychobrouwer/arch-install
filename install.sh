@@ -60,7 +60,7 @@ fi
 
 # Enable waybar
 # sudo sensors-detect
-cat << EOF > "/etc/systemd/user/waybar.service"
+sudo bash -c "cat << EOF > /etc/systemd/system/waybar.service
 [Unit]
 Description=Highly customizable Wayland bar for Sway and Wlroots based compositors.
 Documentation=https://github.com/Alexays/Waybar/wiki/
@@ -75,7 +75,7 @@ Restart=on-failure
 
 [Install]
 WantedBy=graphical-session.target
-EOF
+EOF"
 
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
