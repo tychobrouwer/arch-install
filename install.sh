@@ -139,7 +139,11 @@ cp -sf "$dotfilesdir/.kscreenlockerrc" "$homedir/.config/kscreenlockerrc"
 cp -sf "$dotfilesdir/pip.conf" "$homedir/.config/pip/pip.conf"
 
 # Enable and start sshd
-ssh-keygen -q -t ed25519 -a 100 -f "$homedir/.ssh/id_ed25519" -N ''
+if [ ! -f "$homedir/.ssh/id_ed25519" ]
+then
+  ssh-keygen -q -t ed25519 -a 100 -f "$homedir/.ssh/id_ed25519" -N ''
+fi
+
 sudo systemctl enable sshd.service
 sudo systemctl start sshd.service
 
