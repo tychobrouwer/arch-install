@@ -40,7 +40,7 @@ fi
 paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify --noconfirm --skipreview
 
 # Get variables
-read -p "Repositories directory nam: " reposdirvar
+read -p "Repositories directory name: " reposdirvar
 
 echo
 echo 'Enter git name and email ->'
@@ -60,22 +60,12 @@ fi
 
 # Enable waybar
 # sudo sensors-detect
-sudo bash -c "cat << EOF > /etc/systemd/system/waybar.service
-[Unit]
-Description=Highly customizable Wayland bar for Sway and Wlroots based compositors.
-Documentation=https://github.com/Alexays/Waybar/wiki/
-PartOf=graphical-session.target
-After=graphical-session.target
-Requisite=graphical-session.target
-
-[Service]
-ExecStart=usr/bin/waybar
-ExecReload=kill -SIGUSR2 \$MAINPID
-Restart=on-failure
-
-[Install]
-WantedBy=graphical-session.target
-EOF"
+cat << EOF > "$homedir/.config/autostart/waybar.desktop"
+[Desktop Entry]
+Type=Application
+Name=Waybar
+Exec=waybar
+EOF
 
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
