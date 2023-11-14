@@ -56,13 +56,21 @@ chsh "$USER" -s "$(which zsh)"
 
 # Enable waybar
 # sudo sensors-detect
-mkdir -p "$homedir/.config/autostart"
-cat << EOF > "$homedir/.config/autostart/waybar.desktop"
-[Desktop Entry]
-Exec=/bin/waybar
-Name=Waybar
-Type=Application
-X-KDE-AutostartScript=true
+cat << EOF > "/etc/systemd/user/waybar.service"
+[Unit]
+Description=Highly customizable Wayland bar for Sway and Wlroots based compositors.
+Documentation=https://github.com/Alexays/Waybar/wiki/
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
+
+[Service]
+ExecStart=usr/bin/waybar
+ExecReload=kill -SIGUSR2 \$MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target
 EOF
 
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
