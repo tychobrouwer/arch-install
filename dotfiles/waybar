@@ -21,7 +21,7 @@
     "battery#bat2"
   ],
   "custom/clock": {
-    "exec": "date +'%a  %d  %b  %Y  -  %H:%M'",
+    "exec": "date +'%a  %d  %b  %Y  -  %H:%M:%S'",
     "interval": 1,
     "tooltip": false
   },
