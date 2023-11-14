@@ -73,7 +73,7 @@ sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 cat << EOF > "$homedir/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Exec=spotify --uri=%U
+Exec=spotify & sleep 0.2 && xdotool search --onlyvisible --name "spotify" windowquit
 GenericName=Music Player
 Icon=spotify-client
 MimeType=x-scheme-handler/spotify;
@@ -183,3 +183,17 @@ do
   
   sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
 done
+
+sudo bash -c "cat << EOF > /usr/share/applications/spotify.desktop
+[Desktop Entry]
+Type=Application
+Name=Spotify
+GenericName=Music Player
+Icon=spotify-client
+TryExec=spotify
+Exec=spotify
+Terminal=false
+MimeType=x-scheme-handler/spotify;
+Categories=Audio;Music;Player;AudioVideo;
+StartupWMClass=spotify
+EOF"
