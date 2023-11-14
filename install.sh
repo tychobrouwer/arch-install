@@ -139,7 +139,7 @@ cp -sf "$dotfilesdir/.zshrc" "$homedir/.zshrc"
 cp -sf "$dotfilesdir/dolphinrc" "$homedir/.config/dolphinrc"
 mkdir -p "$homedir/.local/share/dolphin/view_properties/global"
 cp -sf "$dotfilesdir/.directory-dolphin" "$homedir/.local/share/dolphin/view_properties/global/.directory"
-cp -sf "$dotfilesdir/.kscreenlockerrc" "$homedir/.config/kscreenlockerrc"
+cp -sf "$dotfilesdir/kscreenlockerrc" "$homedir/.config/kscreenlockerrc"
 cp -sf "$dotfilesdir/pip.conf" "$homedir/.config/pip/pip.conf"
 
 # Enable and start sshd
