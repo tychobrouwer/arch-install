@@ -70,6 +70,20 @@ EOF
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
+cat << EOF > "$homedir/.config/autostart/spotify.desktop"
+[Desktop Entry]
+Categories=Audio;Music;Player;AudioVideo;
+Exec=spotify --uri=%U
+GenericName=Music Player
+Icon=spotify-client
+MimeType=x-scheme-handler/spotify;
+Name=Spotify
+StartupWMClass=spotify
+Terminal=false
+TryExec=spotify
+Type=Application
+EOF
+
 # Enable kde plasma themes
 git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
 cd "$reposdir/kde-theme"
