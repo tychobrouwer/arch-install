@@ -131,7 +131,14 @@ EOF"
 
 # Configure dotfiles
 dotfilesdir="$reposdir/arch-install/dotfiles"
-git clone https://github.com/TychoBrouwer/arch-install.git "$reposdir/arch-install"
+if [ ! -d "$reposdir/arch-install" ]
+then
+  git clone https://github.com/TychoBrouwer/arch-install.git "$reposdir/arch-install"
+else
+  cd "$reposdir/arch-install" || exit
+  git pull
+  git rebase
+fi
 
 sudo cp -sf "$dotfilesdir/waybar" "/etc/xdg/waybar/config"
 sudo cp -sf "$dotfilesdir/waybar.css" "/etc/xdg/waybar/style.css"
