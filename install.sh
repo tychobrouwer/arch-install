@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parallel downloads pacman
-sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 10' /etc/pacman.conf
+sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 20' /etc/pacman.conf
 
 # Create pacman hook for systemd-boot
 sudo mkdir -p /etc/pacman.d/hooks
@@ -41,12 +41,12 @@ paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-
 
 # Get variables
 homedir="/home/$USER"
-config_file="./config.json"
+reposdirname=$(jq -r '.reposdirname' "./config.json")
+reposdir="$homedir/$reposdirname"
+config_file="$reposdir/arch-install/config.json"
 
 gitname=$(jq -r '.gitname' "$config_file")
 gitemail=$(jq -r '.gitemail' "$config_file")
-reposdirname=$(jq -r '.reposdirname' "$config_file")
-reposdir="$homedir/$reposdirname"
 
 # Install oh-my-zsh
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
