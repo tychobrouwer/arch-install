@@ -229,13 +229,15 @@ Kind = wireguard
 Description = Wireguard homenetwork VPN tunnel
 
 [WireGuard]
-ListenPort = $wireguard_port
 PrivateKey = $wireguard_private_key
+Address = $wireguard_address
+dns = $wireguard_dns
 
 [WireGuardPeer]
 PublicKey = $wireguard_public_key
 AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
 Endpoint = $wireguard_server:$wireguard_port
+PersistentKeepalive = 25
 EOF"
 
 sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.network
@@ -244,6 +246,9 @@ Name = wg0
 
 [Network]
 Address = $wireguard_address
+
+[Route]
+Gateway = 192.168.178.1
 EOF"
 
 sudo chown root:systemd-network /etc/systemd/network/99-wg0.netdev
