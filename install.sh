@@ -142,7 +142,7 @@ if [ ! -d "$reposdir/arch-install" ]
 then
   git clone https://github.com/TychoBrouwer/arch-install.git "$reposdir/arch-install"
 else
-  cd "$reposdir/arch-install" || exit
+  cd "$reposdir/arch-install"
   git pull
   git rebase
 fi
