@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -37,7 +37,7 @@ then
 fi
 
 # Install paru packages
-paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify --noconfirm --skipreview
+paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player --noconfirm --skipreview
 
 # Get variables
 read -p "Repositories directory name: " reposdirvar
@@ -212,3 +212,21 @@ MimeType=x-scheme-handler/spotify;
 Categories=Audio;Music;Player;AudioVideo;
 StartupWMClass=spotify
 EOF"
+
+# Configure Wireguard (private ip ranges)
+
+sudo bash -c "cat << EOF > /etc/wireguard/wg0.conf
+[Interface]
+PrivateKey = PRIVATE_KEY
+Address = 10.6.0.3/32
+DNS = 192.168.178.101
+
+[Peer]
+PublicKey = PUBLIC_KEY
+AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+Endpoint = SERVER_IP:51820
+PersistentKeepalive = 21
+EOF"
+
+sudo systemctl enable wireguard
+sudo systemctl start wireguard
