@@ -208,6 +208,7 @@ wireguard_address=$( jq -r '.wireguard.address' "$config_file" )
 wireguard_server=$( jq -r '.wireguard.server' "$config_file" )
 wireguard_port=$( jq -r '.wireguard.port' "$config_file" )
 wireguard_dns=$( jq -r '.wireguard.dns' "$config_file" )
+wireguard_gateway=$( jq -r '.wireguard.gateway' "$config_file" )
 
 sudo bash -c "cat << EOF > /etc/wireguard/wg0.conf
 [Interface]
@@ -230,8 +231,6 @@ Description = Wireguard homenetwork VPN tunnel
 
 [WireGuard]
 PrivateKey = $wireguard_private_key
-Address = $wireguard_address
-dns = $wireguard_dns
 
 [WireGuardPeer]
 PublicKey = $wireguard_public_key
@@ -248,7 +247,7 @@ Name = wg0
 Address = $wireguard_address
 
 [Route]
-Gateway = 192.168.178.1
+Gateway = $wireguard_gateway
 EOF"
 
 sudo chown root:systemd-network /etc/systemd/network/99-wg0.netdev

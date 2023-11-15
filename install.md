@@ -63,3 +63,20 @@ Optional repositories: multilib
 ## Reboot
 
 Reboot the system into the new installation:
+
+## Post-installation
+
+clone the dotfiles repo:
+
+```sh
+mkdir ~/Repositories
+cd ~/Repositories
+git clone https://github.com/TychoBrouwer/arch-install.git
+cd arch-install
+```
+
+Complete the config.json file and run the install script:
+
+```sh
+./install.sh
+```

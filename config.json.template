@@ -8,6 +8,7 @@
     "public_key": "PUBLIC_KEY",
     "address": "10.6.0.3/32",
     "server": "SERVER_IP",
-    "dns": "192.168.178.101"
+    "dns": "192.168.178.101",
+    "gateway": "192.168.178.1"
   }
 }
