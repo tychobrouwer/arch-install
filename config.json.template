@@ -2,6 +2,7 @@
   "gitname": "Tycho Brouwer",
   "gitemail": "GIT_EMAIL",
   "reposdirname": "Repositories",
+  "is_thinkpad": false,
   "wireguard": [
     {
       "description": "Wireguard Private IPs VPN tunnel",
