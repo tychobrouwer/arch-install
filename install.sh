@@ -40,15 +40,28 @@ fi
 paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player --noconfirm --skipreview
 
 # Get variables
-read -p "Repositories directory name: " reposdirvar
-
-echo
-echo 'Enter git name and email ->'
-read -p "Git name: " gitname
-read -p "Git email: " gitemail
-
 homedir="/home/$USER"
-reposdir="$homedir/$reposdirvar"
+
+if [ -d "$homedir/Repositories" ]
+then
+  reposdir="$homedir/Repositories"
+elif [ -d "$homedir/Projects" ]
+then
+  reposdir="$homedir/Projects"
+else
+  read -p "Repositories directory name: " reposdirvar
+  reposdir="$homedir/$reposdirvar"
+fi
+
+# Check if github username and email are set
+if [ -z "$(git config --global --get user.name)" ]
+then
+  echo 'Enter git name and email ->'
+  read -p "Git name: " gitname
+  read -p "Git email: " gitemail
+  git config --global user.name "$gitname"
+  git config --global user.email "$gitemail"
+fi
 
 # Install oh-my-zsh
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -166,11 +179,6 @@ fi
 sudo systemctl enable sshd.service
 sudo systemctl start sshd.service
 
-# Configure git
-git config --global user.name "$gitname"
-git config --global user.email "$gitemail"
-git config --global core.ignorecase false
-
 # Set kwinrc settings
 kwriteconfig5 --file "$homedir/.config/kwinrc" --group Desktops --key Number 2
 kwriteconfig5 --file "$homedir/.config/ktimezonedrc" --group TimeZones --key LocalZone Europe/Amsterdam
@@ -252,5 +260,7 @@ Name = wg0
 Address = 10.6.0.3/32
 EOF"
 
-sudo chown root:systemd-network /etc/systemd/network/99-*.netdev
-sudo chmod 0640 /etc/systemd/network/99-*.netdev
+sudo chown root:systemd-network /etc/systemd/network/99-wg0.netdev
+sudo chmod 0640 /etc/systemd/network/99-wg0.netdev
+
+sudo systemctl restart systemd-networkd.service
