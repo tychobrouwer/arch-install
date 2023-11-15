@@ -76,6 +76,8 @@ while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
 EOF
 
+sudo chmod +x "$homedir/.config/autostart/spotify.sh"
+
 cat << EOF > "$homedir/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
