@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -37,7 +37,7 @@ then
 fi
 
 # Install paru packages
-paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player --noconfirm --skipreview
+paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin --noconfirm --skipreview
 
 # Get variables
 homedir="/home/$USER"
@@ -200,17 +200,17 @@ Categories=Audio;Music;Player;AudioVideo;
 StartupWMClass=spotify
 EOF"
 
-# Configure Wireguard (private ip ranges)
+# Configure Wireguard VPN connections
+wg_n=$( jq -r ".wireguard.[].server" "$config_file" | wc -l )
 
 i=0;
-wg_interfaces=$( jq -r '.wireguard.[].server' "$config_file" | wc -l )
-
-while [ $i -lt $wg_interfaces ]
+while [ $i -lt $wg_n ]
 do
   _jq() {
     echo $(jq -r ".wireguard.[$i]${1}" "$config_file")
   }
 
+  wireguard_description=$(_jq '.description')
   wireguard_private_key=$(_jq '.private_key')
   wireguard_public_key=$(_jq '.public_key')
   wireguard_address=$(_jq '.address')
@@ -232,9 +232,9 @@ do
 
   sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.netdev
   [NetDev]
-  Name = wg0
+  Name = wg$i
   Kind = wireguard
-  Description = Wireguard homenetwork VPN tunnel
+  Description = $wireguard_description
 
   [WireGuard]
   PrivateKey = $wireguard_private_key
@@ -248,7 +248,7 @@ do
 
   sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.network
   [Match]
-  Name = wg0
+  Name = wg$i
 
   [Network]
   Address = $wireguard_address
