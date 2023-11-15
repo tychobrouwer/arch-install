@@ -2,13 +2,24 @@
   "gitname": "Tycho Brouwer",
   "gitemail": "GIT_EMAIL",
   "reposdirname": "Repositories",
-  "wireguard": {
-    "port": 51820,
-    "private_key": "PRIVATE_KEY",
-    "public_key": "PUBLIC_KEY",
-    "address": "10.6.0.3/32",
-    "server": "SERVER_IP",
-    "dns": "192.168.178.101",
-    "gateway": "192.168.178.1"
-  }
+  "wireguard": [
+    {
+      "port": 51820,
+      "private_key": "PRIVATE_KEY",
+      "public_key": "PUBLIC_KEY",
+      "address": "10.6.0.3/32",
+      "server": "SERVER_IP",
+      "gateway": "192.168.178.1",
+      "allowed_ips": "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+    },
+    {
+      "port": 51820,
+      "private_key": "PRIVATE_KEY",
+      "public_key": "PUBLIC_KEY",
+      "address": "10.6.0.3/32",
+      "server": "SERVER_IP",
+      "gateway": "192.168.178.1",
+      "allowed_ips": "0.0.0.0/0"
+    }
+  ]
 }

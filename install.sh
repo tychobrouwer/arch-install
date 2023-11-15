@@ -202,55 +202,63 @@ EOF"
 
 # Configure Wireguard (private ip ranges)
 
-wireguard_private_key=$( jq -r '.wireguard.private_key' "$config_file" )
-wireguard_public_key=$( jq -r '.wireguard.public_key' "$config_file" )
-wireguard_address=$( jq -r '.wireguard.address' "$config_file" )
-wireguard_server=$( jq -r '.wireguard.server' "$config_file" )
-wireguard_port=$( jq -r '.wireguard.port' "$config_file" )
-wireguard_dns=$( jq -r '.wireguard.dns' "$config_file" )
-wireguard_gateway=$( jq -r '.wireguard.gateway' "$config_file" )
+i=0;
+wg_interfaces=$( jq -r '.wireguard.[].server' "$config_file" | wc -l )
 
-sudo bash -c "cat << EOF > /etc/wireguard/wg0.conf
-[Interface]
-PrivateKey = $wireguard_private_key
-Address = $wireguard_address
-DNS = $wireguard_dns
+while [ $i -lt $wg_interfaces ]
+do
+  _jq() {
+    echo $(jq -r ".wireguard.[$i]${1}" "$config_file")
+  }
 
-[Peer]
-PublicKey = $wireguard_public_key
-AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-Endpoint = $wireguard_server:$wireguard_port
-PersistentKeepalive = 21
-EOF"
+  wireguard_private_key=$(_jq '.private_key')
+  wireguard_public_key=$(_jq '.public_key')
+  wireguard_address=$(_jq '.address')
+  wireguard_server=$(_jq '.server')
+  wireguard_port=$(_jq '.port')
+  wireguard_gateway=$(_jq '.gateway')
+  wireguard_allowed_ips=$(_jq '.allowed_ips')
 
-sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.netdev
-[NetDev]
-Name = wg0
-Kind = wireguard
-Description = Wireguard homenetwork VPN tunnel
+  sudo bash -c "cat << EOF > /etc/wireguard/wg$i.conf
+  [Interface]
+  PrivateKey = $wireguard_private_key
 
-[WireGuard]
-PrivateKey = $wireguard_private_key
+  [Peer]
+  PublicKey = $wireguard_public_key
+  AllowedIPs = $wireguard_allowed_ips
+  Endpoint = $wireguard_server:$wireguard_port
+  PersistentKeepalive = 21
+  EOF"
 
-[WireGuardPeer]
-PublicKey = $wireguard_public_key
-AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-Endpoint = $wireguard_server:$wireguard_port
-PersistentKeepalive = 25
-EOF"
+  sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.netdev
+  [NetDev]
+  Name = wg0
+  Kind = wireguard
+  Description = Wireguard homenetwork VPN tunnel
 
-sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.network
-[Match]
-Name = wg0
+  [WireGuard]
+  PrivateKey = $wireguard_private_key
 
-[Network]
-Address = $wireguard_address
+  [WireGuardPeer]
+  PublicKey = $wireguard_public_key
+  AllowedIPs = $wireguard_allowed_ips
+  Endpoint = $wireguard_server:$wireguard_port
+  PersistentKeepalive = 21
+  EOF"
 
-[Route]
-Gateway = $wireguard_gateway
-EOF"
+  sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.network
+  [Match]
+  Name = wg0
 
-sudo chown root:systemd-network /etc/systemd/network/99-wg0.netdev
-sudo chmod 0640 /etc/systemd/network/99-wg0.netdev
+  [Network]
+  Address = $wireguard_address
+
+  [Route]
+  Gateway = $wireguard_gateway
+  EOF"
+
+  sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
+  sudo chmod 0640 /etc/systemd/network/$((99-$i))-wg$i.netdev
+done
 
 sudo systemctl restart systemd-networkd.service

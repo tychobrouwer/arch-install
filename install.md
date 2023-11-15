@@ -47,7 +47,7 @@ User account:
   password: ******
   sudo: True
 Profile:
-  Type: Desktop - Hyperland - polkit
+  Type: Desktop - KDE Plasma - Kwin
   Graphics drivers: Nvidia (proprietary)
   Greeter: sddm
 Audio: Pipewire
