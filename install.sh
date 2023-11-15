@@ -228,5 +228,29 @@ Endpoint = SERVER_IP:51820
 PersistentKeepalive = 21
 EOF"
 
-sudo systemctl enable wireguard
-sudo systemctl start wireguard
+sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.netdev
+[NetDev]
+Name = wg0
+Kind = wireguard
+Description = Wireguard homenetwork VPN tunnel
+
+[WireGuard]
+ListenPort = 51820
+PrivateKey = PRIVATE_KEY
+
+[WireGuardPeer]
+PublicKey = PUBLIC_KEY
+AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+Endpoint = SERVER_IP:51820
+EOF"
+
+sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.network
+[Match]
+Name = wg0
+
+[Network]
+Address = 10.6.0.3/32
+EOF"
+
+sudo chown root:systemd-network /etc/systemd/network/99-*.netdev
+sudo chmod 0640 /etc/systemd/network/99-*.netdev
