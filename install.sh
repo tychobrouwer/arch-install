@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -41,27 +41,12 @@ paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-
 
 # Get variables
 homedir="/home/$USER"
+config_file="./config.json"
 
-if [ -d "$homedir/Repositories" ]
-then
-  reposdir="$homedir/Repositories"
-elif [ -d "$homedir/Projects" ]
-then
-  reposdir="$homedir/Projects"
-else
-  read -p "Repositories directory name: " reposdirvar
-  reposdir="$homedir/$reposdirvar"
-fi
-
-# Check if github username and email are set
-if [ -z "$(git config --global --get user.name)" ]
-then
-  echo 'Enter git name and email ->'
-  read -p "Git name: " gitname
-  read -p "Git email: " gitemail
-  git config --global user.name "$gitname"
-  git config --global user.email "$gitemail"
-fi
+gitname=$(jq -r '.gitname' "$config_file")
+gitemail=$(jq -r '.gitemail' "$config_file")
+reposdirname=$(jq -r '.reposdirname' "$config_file")
+reposdir="$homedir/$reposdirname"
 
 # Install oh-my-zsh
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -152,14 +137,6 @@ EOF"
 
 # Configure dotfiles
 dotfilesdir="$reposdir/arch-install/dotfiles"
-if [ ! -d "$reposdir/arch-install" ]
-then
-  git clone https://github.com/TychoBrouwer/arch-install.git "$reposdir/arch-install"
-else
-  cd "$reposdir/arch-install"
-  git pull
-  git rebase
-fi
 
 sudo cp -sf "$dotfilesdir/waybar" "/etc/xdg/waybar/config"
 sudo cp -sf "$dotfilesdir/waybar.css" "/etc/xdg/waybar/style.css"
@@ -223,16 +200,23 @@ EOF"
 
 # Configure Wireguard (private ip ranges)
 
+wireguard_private_key=$( jq -r '.wireguard.private_key' "$config_file" )
+wireguard_public_key=$( jq -r '.wireguard.public_key' "$config_file" )
+wireguard_address=$( jq -r '.wireguard.address' "$config_file" )
+wireguard_server=$( jq -r '.wireguard.server' "$config_file" )
+wireguard_port=$( jq -r '.wireguard.port' "$config_file" )
+wireguard_dns=$( jq -r '.wireguard.dns' "$config_file" )
+
 sudo bash -c "cat << EOF > /etc/wireguard/wg0.conf
 [Interface]
-PrivateKey = PRIVATE_KEY
-Address = 10.6.0.3/32
-DNS = 192.168.178.101
+PrivateKey = $wireguard_private_key
+Address = $wireguard_address
+DNS = $wireguard_dns
 
 [Peer]
-PublicKey = PUBLIC_KEY
+PublicKey = $wireguard_public_key
 AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-Endpoint = SERVER_IP:51820
+Endpoint = $wireguard_server:$wireguard_port
 PersistentKeepalive = 21
 EOF"
 
@@ -243,13 +227,13 @@ Kind = wireguard
 Description = Wireguard homenetwork VPN tunnel
 
 [WireGuard]
-ListenPort = 51820
-PrivateKey = PRIVATE_KEY
+ListenPort = $wireguard_port
+PrivateKey = $wireguard_private_key
 
 [WireGuardPeer]
-PublicKey = PUBLIC_KEY
+PublicKey = $wireguard_public_key
 AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-Endpoint = SERVER_IP:51820
+Endpoint = $wireguard_server:$wireguard_port
 EOF"
 
 sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.network
@@ -257,7 +241,7 @@ sudo bash -c "cat << EOF > /etc/systemd/network/99-wg0.network
 Name = wg0
 
 [Network]
-Address = 10.6.0.3/32
+Address = $wireguard_address
 EOF"
 
 sudo chown root:systemd-network /etc/systemd/network/99-wg0.netdev

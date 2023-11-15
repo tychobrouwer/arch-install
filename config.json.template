@@ -1,0 +1,13 @@
+{
+  "gitname": "Tycho Brouwer",
+  "gitemail": "GIT_EMAIL",
+  "reposdirname": "Repositories",
+  "wireguard": {
+    "port": 51820,
+    "private_key": "PRIVATE_KEY",
+    "public_key": "PUBLIC_KEY",
+    "address": "10.6.0.3/32",
+    "server": "SERVER_IP",
+    "dns": "192.168.178.101"
+  }
+}
