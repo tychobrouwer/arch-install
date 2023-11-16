@@ -312,3 +312,5 @@ then
   Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
   EOF"
 fi
+
+# Install Bumblebee
