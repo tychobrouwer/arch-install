@@ -221,42 +221,42 @@ do
   wireguard_allowed_ips=$(_jq '.allowed_ips')
 
   sudo bash -c "cat << EOF > /etc/wireguard/wg$i.conf
-  [Interface]
-  PrivateKey = $wireguard_private_key
+[Interface]
+PrivateKey = $wireguard_private_key
 
-  [Peer]
-  PublicKey = $wireguard_public_key
-  AllowedIPs = $wireguard_allowed_ips
-  Endpoint = $wireguard_server:$wireguard_port
-  PersistentKeepalive = 21
-  EOF"
+[Peer]
+PublicKey = $wireguard_public_key
+AllowedIPs = $wireguard_allowed_ips
+Endpoint = $wireguard_server:$wireguard_port
+PersistentKeepalive = 21
+EOF"
 
   sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.netdev
-  [NetDev]
-  Name = wg$i
-  Kind = wireguard
-  Description = $wireguard_description
+[NetDev]
+Name = wg$i
+Kind = wireguard
+Description = $wireguard_description
 
-  [WireGuard]
-  PrivateKey = $wireguard_private_key
+[WireGuard]
+PrivateKey = $wireguard_private_key
 
-  [WireGuardPeer]
-  PublicKey = $wireguard_public_key
-  AllowedIPs = $wireguard_allowed_ips
-  Endpoint = $wireguard_server:$wireguard_port
-  PersistentKeepalive = 21
-  EOF"
+[WireGuardPeer]
+PublicKey = $wireguard_public_key
+AllowedIPs = $wireguard_allowed_ips
+Endpoint = $wireguard_server:$wireguard_port
+PersistentKeepalive = 21
+EOF"
 
   sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.network
-  [Match]
-  Name = wg$i
+[Match]
+Name = wg$i
 
-  [Network]
-  Address = $wireguard_address
+[Network]
+Address = $wireguard_address
 
-  [Route]
-  Gateway = $wireguard_gateway
-  EOF"
+[Route]
+Gateway = $wireguard_gateway
+EOF"
 
   sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
   sudo chmod 0640 /etc/systemd/network/$((99-$i))-wg$i.netdev
@@ -272,9 +272,9 @@ then
   sudo pacman -Sy --needed tlp --noconfirm
 
   sudo bash -c "cat << EOF > /etc/tlp.conf
-  START_CHARGE_THRESH_BAT0=75
-  STOP_CHARGE_THRESH_BAT0=80
-  EOF"
+START_CHARGE_THRESH_BAT0=75
+STOP_CHARGE_THRESH_BAT0=80
+EOF"
 
   sudo systemctl enable tlp.service
   sudo systemctl start tlp.service
@@ -297,21 +297,21 @@ then
   sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*_linux-zen.conf
 
   sudo bash -c "cat EOF > /etc/pacman.d/hooks/nvidia.hook
-  [Trigger]
-  Operation=Install
-  Operation=Upgrade
-  Operation=Remove
-  Type=Package
-  Target=nvidia-dkms
-  Target=linux-zen
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia-dkms
+Target=linux-zen
 
-  [Action]
-  Description=Update NVIDIA module in initcpio
-  Depends=mkinitcpio
-  When=PostTransaction
-  NeedsTargets
-  Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
-  EOF"
+[Action]
+Description=Update NVIDIA module in initcpio
+Depends=mkinitcpio
+When=PostTransaction
+NeedsTargets
+Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+EOF"
 fi
 
 # Install Bumblebee
