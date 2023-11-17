@@ -304,53 +304,53 @@ sudo systemctl restart systemd-networkd.service
 
 # TLP setup
 
-# is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
-# if $is_thinkpad == true
-# then
-#   sudo pacman -Sy --needed tlp --noconfirm
+is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
+if $is_thinkpad == true
+then
+  sudo pacman -Sy --needed tlp --noconfirm
 
-#   sudo bash -c "cat << EOF > /etc/tlp.conf
-# START_CHARGE_THRESH_BAT0=75
-# STOP_CHARGE_THRESH_BAT0=80
-# EOF"
+  sudo bash -c "cat << EOF > /etc/tlp.conf
+START_CHARGE_THRESH_BAT0=75
+STOP_CHARGE_THRESH_BAT0=80
+EOF"
 
-#   sudo systemctl enable tlp.service
-#   sudo systemctl start tlp.service
-#   sudo systemctl mask systemd-rfkill.service
-#   sudo systemctl mask systemd-rfkill.socket
-# fi
+  sudo systemctl enable tlp.service
+  sudo systemctl start tlp.service
+  sudo systemctl mask systemd-rfkill.service
+  sudo systemctl mask systemd-rfkill.socket
+fi
 
-# # Install nvidia drivers
+# Install nvidia drivers
 
-# is_nvidia=$(lspci | grep -i nvidia | wc -l)
+is_nvidia=$(lspci | grep -i nvidia | wc -l)
 
-# if [ $is_nvidia -gt 0 ]
-# then
-#   sudo pacman -Sy --needed linux-zen-headers nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings --noconfirm
+if [ $is_nvidia -gt 0 ]
+then
+  sudo pacman -Sy --needed linux-zen-headers nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings --noconfirm
 
-#   sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
-#   sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
-#   sudo mkinitcpio -P
+  sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
+  sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
+  sudo mkinitcpio -P
 
-#   sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*_linux-zen.conf
+  sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*_linux-zen.conf
 
-#   sudo bash -c "cat EOF > /etc/pacman.d/hooks/nvidia.hook
-# [Trigger]
-# Operation=Install
-# Operation=Upgrade
-# Operation=Remove
-# Type=Package
-# Target=nvidia-dkms
-# Target=linux-zen
+  sudo bash -c "cat EOF > /etc/pacman.d/hooks/nvidia.hook
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia-dkms
+Target=linux-zen
 
-# [Action]
-# Description=Update NVIDIA module in initcpio
-# Depends=mkinitcpio
-# When=PostTransaction
-# NeedsTargets
-# Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
-# EOF"
-# fi
+[Action]
+Description=Update NVIDIA module in initcpio
+Depends=mkinitcpio
+When=PostTransaction
+NeedsTargets
+Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+EOF"
+fi
 
 # Install Bumblebee
 
