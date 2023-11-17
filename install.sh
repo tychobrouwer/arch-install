@@ -296,6 +296,8 @@ EOF"
 
   sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
   sudo chmod 0640 /etc/systemd/network/$((99-$i))-wg$i.netdev
+
+  i = $((i+1))
 done
 
 sudo systemctl restart systemd-networkd.service
