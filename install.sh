@@ -25,7 +25,7 @@ sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -40,9 +40,8 @@ fi
 paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin --noconfirm --skipreview
 
 # Get variables
-homedir="/home/$USER"
 reposdirname=$(jq -r '.reposdirname' "./config.json")
-reposdir="$homedir/$reposdirname"
+reposdir="$HOME/$reposdirname"
 config_file="$reposdir/arch-install/config.json"
 
 gitname=$(jq -r '.gitname' "$config_file")
@@ -58,7 +57,7 @@ fi
 
 # Enable waybar
 # sudo sensors-detect
-cat << EOF > "$homedir/.config/autostart/waybar.desktop"
+cat << EOF > "$HOME/.config/autostart/waybar.desktop"
 [Desktop Entry]
 Type=Application
 Name=Waybar
@@ -69,19 +68,19 @@ sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/cust
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
 # Spotify autostart minimized script
-cat << EOF > "$homedir/.config/autostart/spotify.sh"
+cat << EOF > "$HOME/.config/autostart/spotify.sh"
 #!/bin/bash
 spotify &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
 EOF
 
-sudo chmod +x "$homedir/.config/autostart/spotify.sh"
+sudo chmod +x "$HOME/.config/autostart/spotify.sh"
 
-cat << EOF > "$homedir/.config/autostart/spotify.desktop"
+cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Exec=$homedir/.config/autostart/spotify.sh
+Exec=$HOME/.config/autostart/spotify.sh
 GenericName=Music Player
 Icon=spotify-client
 MimeType=x-scheme-handler/spotify;
@@ -103,7 +102,7 @@ cd "$reposdir/papirus-folders"
 ./install.sh
 
 # Set Dolphin state (mainly for visible panels)
-cat << EOF > "$homedir/.local/share/dolphin/dolphinstaterc"
+cat << EOF > "$HOME/.local/share/dolphin/dolphinstaterc"
 [SettingsDialog]
 1280x800 screen: Height=521
 1280x800 screen: Width=634
@@ -142,25 +141,25 @@ dotfilesdir="$reposdir/arch-install/dotfiles"
 
 sudo cp -sf "$dotfilesdir/waybar" "/etc/xdg/waybar/config"
 sudo cp -sf "$dotfilesdir/waybar.css" "/etc/xdg/waybar/style.css"
-cp -sf "$dotfilesdir/.zshrc" "$homedir/.zshrc"
-cp -sf "$dotfilesdir/dolphinrc" "$homedir/.config/dolphinrc"
-mkdir -p "$homedir/.local/share/dolphin/view_properties/global"
-cp -sf "$dotfilesdir/.directory-dolphin" "$homedir/.local/share/dolphin/view_properties/global/.directory"
-cp -sf "$dotfilesdir/kscreenlockerrc" "$homedir/.config/kscreenlockerrc"
-cp -sf "$dotfilesdir/pip.conf" "$homedir/.config/pip/pip.conf"
+cp -sf "$dotfilesdir/.zshrc" "$HOME/.zshrc"
+cp -sf "$dotfilesdir/dolphinrc" "$HOME/.config/dolphinrc"
+mkdir -p "$HOME/.local/share/dolphin/view_properties/global"
+cp -sf "$dotfilesdir/.directory-dolphin" "$HOME/.local/share/dolphin/view_properties/global/.directory"
+cp -sf "$dotfilesdir/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
+cp -sf "$dotfilesdir/pip.conf" "$HOME/.config/pip/pip.conf"
 
 # Enable and start sshd
-if [ ! -f "$homedir/.ssh/id_ed25519" ]
+if [ ! -f "$HOME/.ssh/id_ed25519" ]
 then
-  ssh-keygen -q -t ed25519 -a 100 -f "$homedir/.ssh/id_ed25519" -N ''
+  ssh-keygen -q -t ed25519 -a 100 -f "$HOME/.ssh/id_ed25519" -N ''
 fi
 
 sudo systemctl enable sshd.service
 sudo systemctl start sshd.service
 
 # Set kwinrc settings
-kwriteconfig5 --file "$homedir/.config/kwinrc" --group Desktops --key Number 2
-kwriteconfig5 --file "$homedir/.config/ktimezonedrc" --group TimeZones --key LocalZone Europe/Amsterdam
+kwriteconfig5 --file "$HOME/.config/kwinrc" --group Desktops --key Number 2
+kwriteconfig5 --file "$HOME/.config/ktimezonedrc" --group TimeZones --key LocalZone Europe/Amsterdam
 
 # Set nodisplay for applications from launcher
 application_desktop_files=(
@@ -174,9 +173,11 @@ application_desktop_files=(
   "/usr/share/applications/qv4l2.desktop"
   "/usr/share/applications/qvidcap.desktop"
   "/usr/share/applications/org.kde.plasma-welcome.desktop"
+  "/usr/share/applications/org.kde.plasma.emojier.desktop"
   "/usr/share/applications/org.kde.kinfocenter.desktop"
   "/usr/share/applications/org.kde.kuserfeedback-console.desktop"
   "/usr/share/applications/thorium-shell.desktop"
+  "/usr/share/applications/cmake-gui.desktop"
 )
 
 for desktop_file in "${application_desktop_files[@]}"
@@ -186,7 +187,7 @@ do
   sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
 done
 
-sudo bash -c "cat << EOF > /usr/share/applications/spotify.desktop
+sudo bash -c "cat << EOF > $HOME/.local/share/applications//spotify.desktop
 [Desktop Entry]
 Type=Application
 Name=Spotify
@@ -314,3 +315,16 @@ then
 fi
 
 # Install Bumblebee
+
+# if [ $is_nvidia -gt 0 ] && [ $is_thinkpad == true ]
+# then
+#   sudo pacman -Sy --needed bumblebee --noconfirm
+
+#   sudo sed -i 's/Driver=/Driver=nvidia/g' /etc/bumblebee/bumblebee.conf
+#   sudo sed -i 's/#PMMethod=/PMMethod=bbswitch/g' /etc/bumblebee/bumblebee.conf
+
+#   sudo gpasswd -a "$USER" bumblebee
+
+#   sudo systemctl enable bumblebeed.service
+#   sudo systemctl start bumblebeed.service
+# fi
