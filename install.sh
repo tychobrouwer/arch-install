@@ -297,10 +297,7 @@ EOF"
   sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
   sudo chmod 0640 /etc/systemd/network/$((99-$i))-wg$i.netdev
 
-  echo $i
-  echo $(($i+1))
-
-  i = $(($i+1))
+  ((i=i+1))
 done
 
 sudo systemctl restart systemd-networkd.service
@@ -308,7 +305,7 @@ sudo systemctl restart systemd-networkd.service
 # TLP setup
 
 is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
-if $is_thinkpad == true
+if [ $is_thinkpad == true ]
 then
   sudo pacman -Sy --needed tlp --noconfirm
 
