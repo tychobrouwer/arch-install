@@ -62,7 +62,7 @@ echo "-------------------------------------------------"
 
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-if [ echo "$SHELL" != "$(which zsh)" ]
+if [ echo "$SHELL" != $(which zsh) ]
 then
   chsh "$USER" -s "$(which zsh)"
 fi
@@ -296,6 +296,9 @@ EOF"
 
   sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
   sudo chmod 0640 /etc/systemd/network/$((99-$i))-wg$i.netdev
+
+  echo $i
+  echo $(($i+1))
 
   i = $(($i+1))
 done
