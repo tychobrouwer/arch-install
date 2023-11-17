@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "-------------------------------------------------"
+echo "------------------- ARCH SETUP ------------------"
+echo "-------------------------------------------------"
+
 # Set parallel downloads pacman
 sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 20' /etc/pacman.conf
 
@@ -23,6 +27,10 @@ sudo sed -i '/#en_GB UTF-8/c\en_GB UTF-8' /etc/locale.gen
 sudo locale-gen
 sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
+
+echo "-------------------------------------------------"
+echo "-----------------INSTALL PACKAGES----------------"
+echo "-------------------------------------------------"
 
 # Install packages
 sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape --noconfirm
@@ -48,6 +56,10 @@ gitname=$(jq -r '.gitname' "$config_file")
 gitemail=$(jq -r '.gitemail' "$config_file")
 
 # Install oh-my-zsh
+echo "-------------------------------------------------"
+echo "-----------------CONFIGURE ZSH-------------------"
+echo "-------------------------------------------------"
+
 ZSH="$reposdir/oh-my-zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 if [ echo "$SHELL" != "$(which zsh)" ]
@@ -56,6 +68,10 @@ then
 fi
 
 # Enable waybar
+echo "-------------------------------------------------"
+echo "----------------CONFIGURE WAYBAR-----------------"
+echo "-------------------------------------------------"
+
 # sudo sensors-detect
 cat << EOF > "$HOME/.config/autostart/waybar.desktop"
 [Desktop Entry]
@@ -90,6 +106,10 @@ Terminal=false
 TryExec=spotify
 Type=Application
 EOF
+
+echo "-------------------------------------------------"
+echo "-------------------APPLY THEME-------------------"
+echo "-------------------------------------------------"
 
 # Enable kde plasma themes
 git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
@@ -137,6 +157,10 @@ MinimumUid=1000
 EOF"
 
 # Configure dotfiles
+echo "-------------------------------------------------"
+echo "-----------------CONFIGURE DOTFILES--------------"
+echo "-------------------------------------------------"
+
 dotfilesdir="$reposdir/arch-install/dotfiles"
 
 sudo cp -sf "$dotfilesdir/waybar" "/etc/xdg/waybar/config"
@@ -149,6 +173,9 @@ cp -sf "$dotfilesdir/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 cp -sf "$dotfilesdir/pip.conf" "$HOME/.config/pip/pip.conf"
 
 # Enable and start sshd
+echo "-------------------------------------------------"
+echo "------------------CONFIGURE SSH------------------"
+echo "-------------------------------------------------"
 if [ ! -f "$HOME/.ssh/id_ed25519" ]
 then
   ssh-keygen -q -t ed25519 -a 100 -f "$HOME/.ssh/id_ed25519" -N ''
@@ -156,6 +183,11 @@ fi
 
 sudo systemctl enable sshd.service
 sudo systemctl start sshd.service
+
+# Apply customizations
+echo "-------------------------------------------------"
+echo "---------------APPLY CUSTOMIZATIONS--------------"
+echo "-------------------------------------------------"
 
 # Set kwinrc settings
 kwriteconfig5 --file "$HOME/.config/kwinrc" --group Desktops --key Number 2
@@ -201,7 +233,11 @@ Categories=Audio;Music;Player;AudioVideo;
 StartupWMClass=spotify
 EOF"
 
-# Configure Wireguard VPN connections
+# Configure Wireguard
+echo "-------------------------------------------------"
+echo "-----------------CONFIGURE WIREGUARD-------------"
+echo "-------------------------------------------------"
+
 wg_n=$( jq -r ".wireguard.[].server" "$config_file" | wc -l )
 
 i=0;
