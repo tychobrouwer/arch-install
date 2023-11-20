@@ -33,7 +33,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape --noconfirm
+sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -348,21 +348,6 @@ Description=Update NVIDIA module in initcpio
 Depends=mkinitcpio
 When=PostTransaction
 NeedsTargets
-Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 EOF"
 fi
-
-# Install Bumblebee
-
-# if [ $is_nvidia -gt 0 ] && [ $is_thinkpad == true ]
-# then
-#   sudo pacman -Sy --needed bumblebee --noconfirm
-
-#   sudo sed -i 's/Driver=/Driver=nvidia/g' /etc/bumblebee/bumblebee.conf
-#   sudo sed -i 's/#PMMethod=/PMMethod=bbswitch/g' /etc/bumblebee/bumblebee.conf
-
-#   sudo gpasswd -a "$USER" bumblebee
-
-#   sudo systemctl enable bumblebeed.service
-#   sudo systemctl start bumblebeed.service
-# fi
