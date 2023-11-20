@@ -303,12 +303,17 @@ done
 sudo systemctl restart systemd-networkd.service
 
 # TLP setup
+echo "-------------------------------------------------"
+echo "-------------------CONFIGURE TLP-----------------"
+echo "-------------------------------------------------"
+
 
 is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
 if [ $is_thinkpad == true ]
 then
   sudo pacman -Sy --needed tlp --noconfirm
 
+  echo "Setting theshold for battery charge (start/stop): 75/80" 
   sudo bash -c "cat << EOF > /etc/tlp.conf
 START_CHARGE_THRESH_BAT0=75
 STOP_CHARGE_THRESH_BAT0=80
@@ -318,6 +323,18 @@ EOF"
   sudo systemctl start tlp.service
   sudo systemctl mask systemd-rfkill.service
   sudo systemctl mask systemd-rfkill.socket
+
+  echo "-------------------------------------------------"
+  echo "----------------CONFIGURE HOWDY------------------"
+  echo "-------------------------------------------------"
+
+  sudo paru -Sy --needed howdy-beta-git --noconfirm
+  sudo sed -i 's/device_path =.*/c\device_path = \/dev\/v4l\/by-id\/usb-Chicony_Electronics_Co._Ltd._Integrated_Camera_0001-video-index0/g' /lib/security/howdy/config.ini
+  sudo sed -i 's/capture_failed =.*/c\capture_failed = false/g' /lib/security/howdy/config.ini
+  sudo sed -i 's/capture_successful =.*/c\capture_successful = false/g' /lib/security/howdy/config.ini
+
+  wget https://github.com/EmixamPP/linux-enable-ir-emitter/releases/download/5.2.4/linux-enable-ir-emitter-5.2.4.systemd.x86-64.tar.gz -O /tmp/linux-enable-ir-emitter.tar.gz
+  sudo tar -C / --no-same-owner -h -xzf /tmp/linux-enable-ir-emitter.tar.gz
 fi
 
 # Install nvidia drivers
