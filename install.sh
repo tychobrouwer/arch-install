@@ -110,7 +110,7 @@ while read -r line; do
     continue
   fi
   
-  current_int=$(                                          \
+  current_int=\$(                                         \
     dbus-send                                             \
       --session --print-reply --dest=org.kde.KWin         \
       \$object_path org.freedesktop.DBus.Properties.Get   \
