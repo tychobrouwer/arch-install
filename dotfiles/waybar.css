@@ -21,11 +21,17 @@ window#waybar {
 #network,
 #pulseaudio,
 #custom-spotify,
-#custom-virt-desktop-1,
-#custom-virt-desktop-2,
 #custom-clock {
   margin: 5px 10px;
   font-weight: bold;
+}
+
+#custom-virt-desktop-1 {
+  margin: 5px 2px 5px 10px;
+}
+
+#custom-virt-desktop-2 {
+  margin: 5px 10px 5px 2px;
 }
 
 #custom-virt-desktop-1.active,
