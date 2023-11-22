@@ -343,6 +343,10 @@ is_nvidia=$(lspci | grep -i nvidia | wc -l)
 
 if [ $is_nvidia -gt 0 ]
 then
+  echo "-------------------------------------------------"
+  echo "-----------------INSTALL NVIDIA------------------"
+  echo "-------------------------------------------------"
+
   sudo pacman -Sy --needed linux-zen-headers nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings --noconfirm
 
   sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
