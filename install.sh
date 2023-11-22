@@ -95,10 +95,10 @@ while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
 EOF
 
-sudo cp -f "$reposdir/arch-install/virt-desktop.sh" "/etc/xdg/waybar/virt-desktop.sh"
+sudo cp -f "$reposdir/arch-install/scripts/virt-desktop-checker.sh" "/etc/xdg/waybar/virt-desktop-checker.sh"
 
 sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
-sudo chmod +x "/etc/xdg/waybar/virt-desktop.sh"
+sudo chmod +x "/etc/xdg/waybar/virt-desktop-checker.sh"
 
 cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
