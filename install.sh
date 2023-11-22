@@ -88,7 +88,7 @@ sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/cust
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
 # Spotify autostart minimized script
-cat << EOF > "$HOME/.config/autostart/spotify.sh"
+cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
@@ -104,7 +104,7 @@ member=currentChanged
 
 dbus-monitor --session "interface='\$interface',member='\$member'" |
 while read -r line; do
-  current_id=$(echo "\$line" | grep 'string' | cut -d '"' -f 2)
+  current_id=\$(echo "\$line" | grep 'string' | cut -d '"' -f 2)
 
   if [[ \$current_id == "" || \$current_id =~ ":" ]]; then
     continue
@@ -125,12 +125,13 @@ while read -r line; do
 done
 EOF
 
-sudo chmod +x "$HOME/.config/autostart/spotify.sh"
+sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
+sudo chmod +x "$HOME/.scripts/virt-desktop-checker.sh"
 
 cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Exec=$HOME/.config/autostart/spotify.sh
+Exec=$HOME/.scripts/waybar-spotify.sh
 GenericName=Music Player
 Icon=spotify-client
 MimeType=x-scheme-handler/spotify;
