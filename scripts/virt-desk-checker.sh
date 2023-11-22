@@ -22,10 +22,8 @@ while read -r line; do
     | grep "string"                                       \
     | grep -v "Desktop"                                   \
     | cut -d '"' -f 2                                     \
-    | grep -n -2 "$current"                               \
+    | grep -n -2 "$current_id"                            \
     | cut -c1-1)
-
-
 
   printf "$current_id : $current_int"
 done
