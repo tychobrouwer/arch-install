@@ -37,13 +37,11 @@
   },
   "custom/virt-desktop-1": {
     "exec": "/etc/xdg/waybar/virt-desktop-checker.sh 1",
-    "format": "     ",
     "restart-interval": 1,
     "return-type": "json"
   },
   "custom/virt-desktop-2": {
     "exec": "/etc/xdg/waybar/virt-desktop-checker.sh 2",
-    "format": "",
     "restart-interval": 1,
     "return-type": "json"
   },
