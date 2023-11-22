@@ -1,6 +1,4 @@
 #!/bin/bash
-set -euo pipefail
-
 desktop_nr=$1
 
 interface=org.kde.KWin.VirtualDesktopManager
