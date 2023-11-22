@@ -95,7 +95,7 @@ while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
 EOF
 
-cat << EOF > "/etc/xdg/waybar/virt-desktop.sh"
+sudo bash -c "cat << EOF > '/etc/xdg/waybar/virt-desktop.sh'
 #!/bin/bash
 set -euo pipefail
 
@@ -126,7 +126,7 @@ while read -r line; do
 
   printf '{"text": "", "class": "%s"}\n' "$(\$desktop_nr == \$current_int && echo 'active' || echo 'inactive')"
 done
-EOF
+EOF"
 
 sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
 sudo chmod +x "/etc/xdg/waybar/virt-desktop.sh"
