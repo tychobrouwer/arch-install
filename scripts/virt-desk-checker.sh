@@ -25,5 +25,5 @@ while read -r line; do
     | grep -n "$current_id"                               \
     | cut -c1-1)
 
-  printf "$current_id : $current_int"
+  printf "$current_id : $current_int \n"
 done
