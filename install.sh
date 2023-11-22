@@ -52,6 +52,10 @@ reposdirname=$(jq -r '.reposdirname' "./config.json")
 reposdir="$HOME/$reposdirname"
 config_file="$reposdir/arch-install/config.json"
 
+mkdir -p "$reposdir"
+mkdir -p "$HOME/.scripts"
+mkdir -p "$HOME/.config/autostart"
+
 gitname=$(jq -r '.gitname' "$config_file")
 gitemail=$(jq -r '.gitemail' "$config_file")
 
@@ -89,6 +93,36 @@ cat << EOF > "$HOME/.config/autostart/spotify.sh"
 spotify &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
+EOF
+
+cat << EOF > "$HOME/.scripts/virt-desktop-checker.sh"
+#!/bin/bash
+
+interface=org.kde.KWin.VirtualDesktopManager
+object_path=/VirtualDesktopManager
+member=currentChanged
+
+dbus-monitor --session "interface='\$interface',member='\$member'" |
+while read -r line; do
+  current_id=$(echo "\$line" | grep 'string' | cut -d '"' -f 2)
+
+  if [[ \$current_id == "" || \$current_id =~ ":" ]]; then
+    continue
+  fi
+  
+  current_int=$(                                          \
+    dbus-send                                             \
+      --session --print-reply --dest=org.kde.KWin         \
+      \$object_path org.freedesktop.DBus.Properties.Get   \
+      string:"\$interface" string:"desktops"              \
+    | grep "string"                                       \
+    | grep -v "Desktop"                                   \
+    | cut -d '"' -f 2                                     \
+    | grep -n "\$current_id"                              \
+    | cut -c1-1)
+
+  echo "\$current_int"
+done
 EOF
 
 sudo chmod +x "$HOME/.config/autostart/spotify.sh"
