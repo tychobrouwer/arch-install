@@ -8,7 +8,7 @@ dbus-monitor --profile "interface='$interface',member='$member'" |
 while read -r line; do
   current_id=$(                                           \
     dbus-send                                             \
-      --session --dest=org.kde.KWin                       \
+      --session --print-reply --dest=org.kde.KWin         \
       $object_path org.freedesktop.DBus.Properties.Get    \
       string:"$interface" string:"current"                \
     | grep "string"                                       \
@@ -16,7 +16,7 @@ while read -r line; do
   
   current_int=$(                                          \
     dbus-send                                             \
-      --session --dest=org.kde.KWin                       \
+      --session --print-reply --dest=org.kde.KWin         \
       $object_path org.freedesktop.DBus.Properties.Get    \
       string:"$interface" string:"desktops"               \
     | grep "string"                                       \
