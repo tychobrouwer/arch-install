@@ -18,12 +18,19 @@ window#waybar {
 #battery,
 #memory,
 #disk,
-#custom-spotify,
 #network,
 #pulseaudio,
+#custom-spotify,
+#custom-virt-desktop-1,
+#custom-virt-desktop-2,
 #custom-clock {
   margin: 5px 10px;
   font-weight: bold;
+}
+
+#custom-virt-desktop-1.active,
+#custom-virt-desktop-2.active {
+  color: #9ece6a;
 }
 
 #battery {

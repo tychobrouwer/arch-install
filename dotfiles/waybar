@@ -7,6 +7,8 @@
   "margin-right": 0,
   "spacing": 2,
   "modules-left": [
+    "custom/virt-desktop-1",
+    "custom/virt-desktop-2",
     "custom/spotify"
   ],
   "modules-center": [
@@ -32,6 +34,18 @@
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous"
+  },
+  "custom/virt-desktop-1": {
+    "exec": "/etc/xdg/waybar/virt-desktop.sh 1",
+    "format": "",
+    "restart-interval": 1,
+    "return-type": "json"
+  },
+  "custom/virt-desktop-2": {
+    "exec": "/etc/xdg/waybar/virt-desktop.sh 2",
+    "format": "",
+    "restart-interval": 1,
+    "return-type": "json"
   },
   "memory": {
     "format": " {}%",

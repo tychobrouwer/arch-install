@@ -1,4 +1,7 @@
 #!/bin/bash
+set -euo pipefail
+
+desktop_nr=$1
 
 interface=org.kde.KWin.VirtualDesktopManager
 object_path=/VirtualDesktopManager
@@ -23,5 +26,5 @@ while read -r line; do
     | grep -n "$current_id"                               \
     | cut -c1-1)
 
-  echo "$current_int"
+  printf '{"text": "", "class": "%s"}\n' "$($desktop_nr == $current_int && echo 'active' || echo 'inactive')"
 done

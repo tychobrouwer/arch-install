@@ -45,7 +45,7 @@ then
 fi
 
 # Install paru packages
-paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin --noconfirm --skipreview
+paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin downgrade --noconfirm --skipreview
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
@@ -95,8 +95,11 @@ while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
 EOF
 
-cat << EOF > "$HOME/.scripts/virt-desktop-checker.sh"
+cat << EOF > "/etc/xdg/waybar/virt-desktop.sh"
 #!/bin/bash
+set -euo pipefail
+
+desktop_nr=\$1
 
 interface=org.kde.KWin.VirtualDesktopManager
 object_path=/VirtualDesktopManager
@@ -104,13 +107,13 @@ member=currentChanged
 
 dbus-monitor --session "interface='\$interface',member='\$member'" |
 while read -r line; do
-  current_id=\$(echo "\$line" | grep 'string' | cut -d '"' -f 2)
+  current_id=$(echo "\$line" | grep "string" | cut -d '"' -f 2)
 
   if [[ \$current_id == "" || \$current_id =~ ":" ]]; then
     continue
   fi
   
-  current_int=\$(                                         \
+  current_int=$(                                          \
     dbus-send                                             \
       --session --print-reply --dest=org.kde.KWin         \
       \$object_path org.freedesktop.DBus.Properties.Get   \
@@ -121,12 +124,12 @@ while read -r line; do
     | grep -n "\$current_id"                              \
     | cut -c1-1)
 
-  echo "\$current_int"
+  printf '{"text": "", "class": "%s"}\n' "$(\$desktop_nr == \$current_int && echo 'active' || echo 'inactive')"
 done
 EOF
 
 sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
-sudo chmod +x "$HOME/.scripts/virt-desktop-checker.sh"
+sudo chmod +x "/etc/xdg/waybar/virt-desktop.sh"
 
 cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
