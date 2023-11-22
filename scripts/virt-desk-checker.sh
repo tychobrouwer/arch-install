@@ -8,7 +8,7 @@ dbus-monitor --profile "interface='$interface',member='$member'" |
 while read -r line; do
   current_id=$(echo "$line" | grep "string" | cut -d '"' -f 2)
 
-  if [ $current_id == "" || $current_id =~ ":" ]; then
+  if [[ $current_id == "" || $current_id =~ ":" ]]; then
     continue
   fi
   
