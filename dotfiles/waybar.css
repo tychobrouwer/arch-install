@@ -36,7 +36,7 @@ window#waybar {
   margin: 3px 0px 3px 10px;
   padding: 3px;
   font-weight: bold;
-  background-color: #31363b;
+  background-color: #454b50;
   border-radius: 1px;
 }
 
@@ -44,30 +44,30 @@ window#waybar {
   margin: 3px 5px 3px 0px;
   padding: 3px;
   font-weight: bold;
-  background-color: #31363b;
+  background-color: #454b50;
   border-radius: 1px;
 }
 
 #custom-virt-desktop-1.active,
 #custom-virt-desktop-2.active {
   background-color: #dfdfdf;
-  color: #31363b;
+  color: #26292e;
 }
 
 #battery {
   color: #9ece6a;
 }
 
-F #battery.charging {
+#battery.charging {
   color: #9ece6a;
 }
 
 #battery.warning:not(.charging) {
   background-color: #f7768e;
-  color: #24283b;
+  color: #26292e;
   border-radius: 5px 5px 5px 5px;
 }
 
 #pulseaudio.muted {
-  color: #928374;
+  color: #454b50;
 }
