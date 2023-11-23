@@ -197,7 +197,7 @@ echo "---------------APPLY CUSTOMIZATIONS--------------"
 echo "-------------------------------------------------"
 
 # Set kwinrc settings
-kwriteconfig5 --file "$HOME/.config/kwinrc" --group Desktops --key Number 2
+kwriteconfig5 --file "$HOME/.config/kwinrc" --group Desktops --key Number 3
 kwriteconfig5 --file "$HOME/.config/ktimezonedrc" --group TimeZones --key LocalZone Europe/Amsterdam
 
 # Set nodisplay for applications from launcher
