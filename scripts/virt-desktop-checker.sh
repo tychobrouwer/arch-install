@@ -26,5 +26,5 @@ while read -r line; do
     | grep -n "$current_id"                               \
     | cut -c1-1)
 
-  printf '{"text": "        ", "class": "%s"}\n' "$(if [[ $desktop_nr == $current_int ]]; then echo 'active'; else echo 'inactive'; fi)"
+  printf '{"text": "   %s   ", "class": "%s"}\n' "$desktop_nr" "$(if [[ $desktop_nr == $current_int ]]; then echo 'active'; else echo 'inactive'; fi)"
 done

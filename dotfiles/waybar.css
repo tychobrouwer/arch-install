@@ -36,7 +36,8 @@ window#waybar {
 
 #custom-virt-desktop-1.active,
 #custom-virt-desktop-2.active {
-  background-color: #9ece6a;
+  background-color: #dfdfdf;
+  color: #26292e;
 }
 
 #battery {
