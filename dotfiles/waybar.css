@@ -26,7 +26,7 @@ window#waybar {
   padding: 3px 5px;
   font-weight: bold;
   background-color: #9ece6a;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 #disk {
@@ -38,7 +38,7 @@ window#waybar {
   padding: 3px;
   font-weight: bold;
   background-color: #9ece6a;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 #custom-virt-desktop-2 {
@@ -46,7 +46,7 @@ window#waybar {
   padding: 3px;
   font-weight: bold;
   background-color: #9ece6a;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 #custom-virt-desktop-1.active,
