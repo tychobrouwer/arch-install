@@ -32,7 +32,28 @@ window#waybar {
   margin-right: 10px;
 }
 
+*[id^='custom-virt-desktop'] {
+  margin: 3px 0px 3px 0px;
+  padding: 3px;
+  font-weight: bold;
+  background-color: #454b50;
+  border-radius: 1px;
+}
+
+*[id^='custom-virt-desktop'].active {
+  background-color: #dfdfdf;
+  color: #26292e;
+}
+
 #custom-virt-desktop-1 {
+  margin-left: 10px;
+}
+
+#custom-virt-desktop-3 {
+  margin-right: 10px;
+}
+
+/* #custom-virt-desktop-1 {
   margin: 3px 0px 3px 10px;
   padding: 3px;
   font-weight: bold;
@@ -52,7 +73,7 @@ window#waybar {
 #custom-virt-desktop-2.active {
   background-color: #dfdfdf;
   color: #26292e;
-}
+} */
 
 #battery {
   color: #9ece6a;
