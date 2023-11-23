@@ -22,8 +22,10 @@ window#waybar {
 #pulseaudio,
 #custom-spotify,
 #custom-clock {
-  margin: 5px;
+  margin: 2px 5px;
+  padding: 2px 0;
   font-weight: bold;
+  background-color: #9ece6a;
 }
 
 #disk {
@@ -31,13 +33,17 @@ window#waybar {
 }
 
 #custom-virt-desktop-1 {
-  margin: 5px 2px 5px 10px;
+  margin: 2px 2px 2px 10px;
+  padding: 2px 0;
   font-weight: bold;
+  background-color: #9ece6a;
 }
 
 #custom-virt-desktop-2 {
-  margin: 5px 5px 5px 2px;
+  margin: 2px 5px 2px 2px;
+  padding: 2px 0;
   font-weight: bold;
+  background-color: #9ece6a;
 }
 
 #custom-virt-desktop-1.active,

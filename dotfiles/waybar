@@ -46,7 +46,7 @@
     "return-type": "json"
   },
   "memory": {
-    "format": " {used}",
+    "format": " {used}GiB",
     "tooltip": false,
     "interval": 5
   },
@@ -56,7 +56,7 @@
     "interval": 5
   },
   "disk": {
-    "format": " {free}%",
+    "format": " {free}",
     "interval": 5,
     "tooltip": false,
     "path": "/"
