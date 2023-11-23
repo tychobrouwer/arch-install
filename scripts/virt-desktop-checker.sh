@@ -5,7 +5,7 @@ interface=org.kde.KWin.VirtualDesktopManager
 object_path=/VirtualDesktopManager
 member=currentChanged
 
-printf '{"text": "   %s   ", "class": "%s custom-virt-desktop"}\n' "$desktop_nr" "$(if [[ $desktop_nr == 1 ]]; then echo 'active'; else echo 'inactive'; fi)"
+printf '{"text": "   %s   ", "class": "%s"}\n' "$desktop_nr" "$(if [[ $desktop_nr == 1 ]]; then echo 'active'; else echo 'inactive'; fi)"
 
 dbus-monitor --session "interface='$interface',member='$member'" |
 while read -r line; do
@@ -26,5 +26,5 @@ while read -r line; do
     | grep -n "$current_id"                               \
     | cut -c1-1)
 
-  printf '{"text": "   %s   ", "class": "%s custom-virt-desktop"}\n' "$desktop_nr" "$(if [[ $desktop_nr == $current_int ]]; then echo 'active'; else echo 'inactive'; fi)"
+  printf '{"text": "   %s   ", "class": "%s"}\n' "$desktop_nr" "$(if [[ $desktop_nr == $current_int ]]; then echo 'active'; else echo 'inactive'; fi)"
 done
