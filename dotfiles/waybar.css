@@ -36,7 +36,7 @@ window#waybar {
   margin: 3px 0px 3px 10px;
   padding: 3px;
   font-weight: bold;
-  background-color: #2a2e32;
+  background-color: #31363b;
   border-radius: 1px;
 }
 
@@ -44,14 +44,14 @@ window#waybar {
   margin: 3px 5px 3px 0px;
   padding: 3px;
   font-weight: bold;
-  background-color: #2a2e32;
+  background-color: #31363b;
   border-radius: 1px;
 }
 
 #custom-virt-desktop-1.active,
 #custom-virt-desktop-2.active {
-  color: #dfdfdf;
-  color: #26292e;
+  background-color: #dfdfdf;
+  color: #31363b;
 }
 
 #battery {
