@@ -10,7 +10,7 @@
 
 window#waybar {
   background-color: #26292e;
-  color: @theme_text_color;
+  color: #dfdfdf;
   border-bottom: #454b50 1px solid;
 }
 
@@ -23,9 +23,8 @@ window#waybar {
 #custom-spotify,
 #custom-clock {
   margin: 3px 5px;
-  padding: 3px 5px;
+  padding: 3px 0;
   font-weight: bold;
-  background-color: #9ece6a;
   border-radius: 1px;
 }
 
@@ -37,7 +36,7 @@ window#waybar {
   margin: 3px 0px 3px 10px;
   padding: 3px;
   font-weight: bold;
-  background-color: #9ece6a;
+  background-color: #2a2e32;
   border-radius: 1px;
 }
 
@@ -45,13 +44,13 @@ window#waybar {
   margin: 3px 5px 3px 0px;
   padding: 3px;
   font-weight: bold;
-  background-color: #9ece6a;
+  background-color: #2a2e32;
   border-radius: 1px;
 }
 
 #custom-virt-desktop-1.active,
 #custom-virt-desktop-2.active {
-  background-color: @theme_text_color;
+  color: #dfdfdf;
   color: #26292e;
 }
 
@@ -59,7 +58,7 @@ window#waybar {
   color: #9ece6a;
 }
 
-#battery.charging {
+F #battery.charging {
   color: #9ece6a;
 }
 
