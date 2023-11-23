@@ -22,16 +22,22 @@ window#waybar {
 #pulseaudio,
 #custom-spotify,
 #custom-clock {
-  margin: 5px 10px;
+  margin: 5px;
   font-weight: bold;
+}
+
+#disk {
+  margin-right: 10px;
 }
 
 #custom-virt-desktop-1 {
   margin: 5px 2px 5px 10px;
+  font-weight: bold;
 }
 
 #custom-virt-desktop-2 {
-  margin: 5px 10px 5px 2px;
+  margin: 5px 5px 5px 2px;
+  font-weight: bold;
 }
 
 #custom-virt-desktop-1.active,

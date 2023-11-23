@@ -379,3 +379,19 @@ NeedsTargets
 Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 EOF"
 fi
+
+# Install linux-lts kernel as fallback
+
+echo "-------------------------------------------------"
+echo "-----------------INSTALL LINUX-LTS---------------"
+echo "-------------------------------------------------"
+
+sudo pacman -Sy --needed linux-lts linux-lts-headers --noconfirm
+
+partition=$(lsblk -o NAME,SIZE | grep -i nvme | awk '{print $1}')
+
+sudo cp /boot/loader/entries/*_linux-zen.conf /boot/loader/entries/linux-lts.conf
+sudo cp /boot/loader/entries/*_linux-zen-fallback.conf /boot/loader/entries/linux-lts-fallback.conf
+
+sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts.conf
+sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts-fallback.conf
