@@ -5,7 +5,7 @@ interface=org.kde.KWin.VirtualDesktopManager
 object_path=/VirtualDesktopManager
 member=currentChanged
 
-printf '{"text": "        ", "class": "%s"}\n' "$(if [[ $desktop_nr == 1 ]]; then echo 'active'; else echo 'inactive'; fi)"
+printf '{"text": "   %s   ", "class": "%s"}\n' "$desktop_nr" "$(if [[ $desktop_nr == 1 ]]; then echo 'active'; else echo 'inactive'; fi)"
 
 dbus-monitor --session "interface='$interface',member='$member'" |
 while read -r line; do
