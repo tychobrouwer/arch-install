@@ -33,7 +33,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Sy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh ttf-liberation lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -45,7 +45,7 @@ then
 fi
 
 # Install paru packages
-paru -Sy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin downgrade --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin downgrade --noconfirm --skipreview
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
@@ -119,13 +119,27 @@ echo "-------------------APPLY THEME-------------------"
 echo "-------------------------------------------------"
 
 # Enable kde plasma themes
-git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
-cd "$reposdir/kde-theme"
+if [ ! -d "$reposdir/kde-theme" ]
+then
+  git clone https://github.com/TychoBrouwer/kde-theme.git "$reposdir/kde-theme"
+  cd "$reposdir/kde-theme"
+else
+  cd "$reposdir/kde-theme"
+  git pull
+  git rebase
+fi
 sudo ./install.sh
 
 # Enable Dolphin folder color
-git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "$reposdir/papirus-folders"
-cd "$reposdir/papirus-folders"
+if [ ! -d "$reposdir/papirus-folders" ]
+then
+  git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "$reposdir/papirus-folders"
+  cd "$reposdir/papirus-folders"
+else
+  cd "$reposdir/papirus-folders"
+  git pull
+  git rebase
+fi
 ./install.sh
 
 # Set Dolphin state (mainly for visible panels)
