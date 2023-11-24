@@ -81,7 +81,8 @@ Type=Application
 Version=1.0
 Name=kopia-ui
 Comment=koipia-uistartup script
-Exec=/opt/KopiaUI/kopia-ui && $HOME/.scripts/kopia-minimized.sh
+ExecStart=/opt/KopiaUI/kopia-ui 
+ExecStartPost=$HOME/.scripts/kopia-minimized.sh
 StartupNotify=false
 Terminal=false
 EOF
