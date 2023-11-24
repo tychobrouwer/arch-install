@@ -67,10 +67,11 @@ gitemail=$(jq -r '.gitemail' "$config_file")
 # Kopia autostart minimized script
 cat << EOF > "$HOME/.scripts/kopia-minimized.sh"
 #!/bin/bash
-/opt/KopiaUI/kopia-ui &
 while [[ ! \$(xdotool search --onlyvisible --name kopia) ]]; do :; done
 xdotool search --onlyvisible --name kopia windowquit
 EOF
+
+sudo chmod +x "$HOME/.scripts/kopia-minimized.sh"
 
 # Create kopia startup script
 cat << EOF > "$HOME/.config/autostart/kopia-ui.desktop"
@@ -79,7 +80,7 @@ Type=Application
 Version=1.0
 Name=kopia-ui
 Comment=koipia-uistartup script
-Exec=$HOME/.scripts/kopia-minimized.sh
+Exec=/opt/KopiaUI/kopia-ui && $HOME/.scripts/kopia-minimized.sh
 StartupNotify=false
 Terminal=false
 EOF
