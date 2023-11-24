@@ -484,6 +484,7 @@ do
     echo $(jq -r ".smb.[$i]${1}" "$config_file")
   }
 
+  smb_name=$(_jq '.name')
   smb_description=$(_jq '.description')
   smb_destination=$(_jq '.destination')
   smb_source=$(_jq '.source')
@@ -497,7 +498,7 @@ EOF"
 
   sudo chmod 600 /etc/cifspasswd-$i
 
-  sudo bash -c "cat << EOF > /etc/systemd/system/mnt-$i.mount
+  sudo bash -c "cat << EOF > /etc/systemd/system/mnt-$smb_name.mount
 [Unit]
 Description=$smb_description
 RequiresMountsFor=/mnt
@@ -511,13 +512,10 @@ Type=cifs
 Options=uid=tychob,gid=tychob,_netdev,nofail,credentials=/etc/cifspasswd-$i
 TimeoutSec=10
 LazyUnmount=yes
-
-[Install]
-WantedBy=multi-user.target
 EOF"
 
-  sudo systemctl enable mnt-$i.mount
-  sudo systemctl start mnt-$i.mount
+  sudo systemctl enable mnt-$smb_name.mount
+  sudo systemctl start mnt-$smb_name.mount
 
   ((i=i+1))
 done
