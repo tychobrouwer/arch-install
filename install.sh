@@ -273,19 +273,19 @@ do
     echo $(jq -r ".wireguard.[$i]${1}" "$config_file")
   }
 
-  wireguard_description=$(_jq '.description')
   wireguard_private_key=$(_jq '.private_key')
   wireguard_public_key=$(_jq '.public_key')
   wireguard_address=$(_jq '.address')
   wireguard_server=$(_jq '.server')
   wireguard_port=$(_jq '.port')
-  wireguard_gateway=$(_jq '.gateway')
   wireguard_allowed_ips=$(_jq '.allowed_ips')
   wireguard_dns=$(_jq '.dns')
 
   sudo bash -c "cat << EOF > /etc/wireguard/wg$i.conf
 [Interface]
 PrivateKey=$wireguard_private_key
+Address=$wireguard_address
+DNS=$wireguard_dns
 
 [Peer]
 PublicKey=$wireguard_public_key
@@ -296,6 +296,9 @@ EOF"
 
   ((i=i+1))
 done
+
+sudo systemctl enable wg-quick@wg0.service
+sudo systemctl start wg-quick@wg0.service
 
 # TLP setup
 echo "-------------------------------------------------"
