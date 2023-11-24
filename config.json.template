@@ -3,6 +3,7 @@
   "gitemail": "GIT_EMAIL",
   "reposdirname": "Repositories",
   "is_thinkpad": false,
+  "install_wine": true,
   "wireguard": [
     {
       "description": "Wireguard Private IPs VPN tunnel",
@@ -23,6 +24,20 @@
       "server": "SERVER_IP",
       "gateway": "192.168.178.1",
       "allowed_ips": "0.0.0.0/0"
+    }
+  ],
+  "smb": [
+    {
+      "description": "SMB file share",
+      "destination": "/mnt/file-share",
+      "source": "//192.168.178.104/files",
+      "credentials": "credentials=/etc/cifspasswd"
+    },
+    {
+      "description": "SMB media share",
+      "destination": "/mnt/media-share",
+      "source": "//192.168.178.104/media",
+      "credentials": "credentials=/etc/cifspasswd"
     }
   ]
 }

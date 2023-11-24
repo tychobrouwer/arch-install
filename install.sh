@@ -282,43 +282,42 @@ do
   wireguard_port=$(_jq '.port')
   wireguard_gateway=$(_jq '.gateway')
   wireguard_allowed_ips=$(_jq '.allowed_ips')
+  wireguard_dns=$(_jq '.dns')
 
   sudo bash -c "cat << EOF > /etc/wireguard/wg$i.conf
 [Interface]
-PrivateKey = $wireguard_private_key
+PrivateKey=$wireguard_private_key
 
 [Peer]
-PublicKey = $wireguard_public_key
-AllowedIPs = $wireguard_allowed_ips
-Endpoint = $wireguard_server:$wireguard_port
-PersistentKeepalive = 21
+PublicKey=$wireguard_public_key
+AllowedIPs=$wireguard_allowed_ips
+Endpoint=$wireguard_server:$wireguard_port
+PersistentKeepalive=21
 EOF"
 
   sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.netdev
 [NetDev]
-Name = wg$i
-Kind = wireguard
-Description = $wireguard_description
+Name=wg$i
+Kind=wireguard
+Description=$wireguard_description
 
 [WireGuard]
-PrivateKey = $wireguard_private_key
+PrivateKey=$wireguard_private_key
 
 [WireGuardPeer]
-PublicKey = $wireguard_public_key
-AllowedIPs = $wireguard_allowed_ips
-Endpoint = $wireguard_server:$wireguard_port
-PersistentKeepalive = 21
+PublicKey=$wireguard_public_key
+AllowedIPs=$wireguard_allowed_ips
+Endpoint=$wireguard_server:$wireguard_port
+PersistentKeepalive=21
 EOF"
 
   sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.network
 [Match]
-Name = wg$i
+Name=wg$i
 
 [Network]
-Address = $wireguard_address
-
-[Route]
-Gateway = $wireguard_gateway
+Address=$wireguard_address
+DNS=$wireguard_dns
 EOF"
 
   sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
@@ -327,7 +326,8 @@ EOF"
   ((i=i+1))
 done
 
-sudo systemctl restart systemd-networkd.service
+sudo systemctl enable systemd-networkd.service
+sudo systemctl start systemd-networkd.service
 
 # TLP setup
 echo "-------------------------------------------------"
