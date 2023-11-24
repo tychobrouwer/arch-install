@@ -26,18 +26,26 @@
   ],
   "smb": [
     {
-      "name": "file-share",
+      "name": "mnt-file_share",
       "description": "SMB file share",
-      "destination": "/mnt/file-share",
+      "destination": "/mnt/file_share",
       "source": "//192.168.178.104/files",
       "username": "USERNAME",
       "password": "PASSWORD"
     },
     {
-      "name": "media-share",
+      "name": "mnt-media_share",
       "description": "SMB media share",
-      "destination": "/mnt/media-share",
+      "destination": "/mnt/media_share",
       "source": "//192.168.178.104/media",
+      "username": "USERNAME",
+      "password": "PASSWORD"
+    },
+    {
+      "name": "home-tychob-School",
+      "description": "SMB school file share",
+      "destination": "/home/tychob/School",
+      "source": "//192.168.178.104/files/School",
       "username": "USERNAME",
       "password": "PASSWORD"
     }

@@ -492,13 +492,13 @@ do
   smb_password=$(_jq '.password')
 
   sudo bash -c "cat << EOF > /etc/cifspasswd-$i
-$smb_username
-$smb_password
+username=$smb_username
+password=$smb_password
 EOF"
 
   sudo chmod 600 /etc/cifspasswd-$i
 
-  sudo bash -c "cat << EOF > /etc/systemd/system/mnt-$smb_name.mount
+  sudo bash -c "cat << EOF > /etc/systemd/system/$smb_name.mount
 [Unit]
 Description=$smb_description
 RequiresMountsFor=/mnt
