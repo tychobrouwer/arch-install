@@ -64,6 +64,19 @@ mkdir -p "$HOME/.config/autostart"
 gitname=$(jq -r '.gitname' "$config_file")
 gitemail=$(jq -r '.gitemail' "$config_file")
 
+# Create kopia startup script
+cat << EOF > "$HOME/.config/autostart/kopia.desktop"
+[Desktop Entry]
+Name=Kopia
+Exec=/opt/KopiaUI/kopia-ui %U
+Terminal=false
+Type=Application
+Icon=kopia-ui
+StartupWMClass=KopiaUI
+Comment=Fast and secure open source backup.
+Categories=Utility;Backup;
+EOF
+
 # Install oh-my-zsh
 echo "-------------------------------------------------"
 echo "-----------------CONFIGURE ZSH-------------------"
