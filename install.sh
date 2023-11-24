@@ -347,6 +347,7 @@ EOF"
 
   wget https://github.com/EmixamPP/linux-enable-ir-emitter/releases/download/5.2.4/linux-enable-ir-emitter-5.2.4.systemd.x86-64.tar.gz -O /tmp/linux-enable-ir-emitter.tar.gz
   sudo tar -C / --no-same-owner -h -xzf /tmp/linux-enable-ir-emitter.tar.gz
+  rm /tmp/linux-enable-ir-emitter.tar.gz
 fi
 
 # Install nvidia drivers
@@ -515,8 +516,8 @@ EOF"
 [Unit]
 Description=$smb_description
 RequiresMountsFor=/mnt
-Requires=network-online.service wg-quick@wg0
-After=network-online.service wg-quick@wg0
+Requires=network-online.target wg-quick@wg0
+After=network-online.target wg-quick@wg0
 
 [Mount]
 What=$smb_source
@@ -525,10 +526,13 @@ Type=cifs
 Options=uid=tychob,gid=tychob,_netdev,nofail,credentials=/etc/cifspasswd-$i
 TimeoutSec=10
 LazyUnmount=yes
+
+[Install]
+WantedBy=multi-user.target
 EOF"
 
-  sudo systemctl enable mnt-$smb_name.mount
-  sudo systemctl start mnt-$smb_name.mount
+  sudo systemctl enable $smb_name.mount
+  sudo systemctl start $smb_name.mount
 
   ((i=i+1))
 done
