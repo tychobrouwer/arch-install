@@ -511,6 +511,9 @@ Type=cifs
 Options=uid=tychob,gid=tychob,_netdev,nofail,credentials=/etc/cifspasswd-$i
 TimeoutSec=10
 LazyUnmount=yes
+
+[Install]
+WantedBy=multi-user.target
 EOF"
 
   sudo systemctl enable mnt-$i.mount
