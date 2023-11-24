@@ -30,7 +30,6 @@ sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
 sudo sed -i 's/base udev/systemd/' /etc/mkinitcpio.conf
 sudo sed -i 's/fsck//' /etc/mkinitcpio.conf
-sudo mkinitcpio -P
 
 sudo systemctl mask systemd-fsck-root.service
 
@@ -295,39 +294,8 @@ Endpoint=$wireguard_server:$wireguard_port
 PersistentKeepalive=21
 EOF"
 
-  sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.netdev
-[NetDev]
-Name=wg$i
-Kind=wireguard
-Description=$wireguard_description
-
-[WireGuard]
-PrivateKey=$wireguard_private_key
-
-[WireGuardPeer]
-PublicKey=$wireguard_public_key
-AllowedIPs=$wireguard_allowed_ips
-Endpoint=$wireguard_server:$wireguard_port
-PersistentKeepalive=21
-EOF"
-
-  sudo bash -c "cat << EOF > /etc/systemd/network/$((99-$i))-wg$i.network
-[Match]
-Name=wg$i
-
-[Network]
-Address=$wireguard_address
-DNS=$wireguard_dns
-EOF"
-
-  sudo chown root:systemd-network /etc/systemd/network/$((99-$i))-wg$i.netdev
-  sudo chmod 0640 /etc/systemd/network/$((99-$i))-wg$i.netdev
-
   ((i=i+1))
 done
-
-sudo systemctl enable systemd-networkd.service
-sudo systemctl start systemd-networkd.service
 
 # TLP setup
 echo "-------------------------------------------------"
@@ -398,6 +366,8 @@ When=PostTransaction
 NeedsTargets
 Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 EOF"
+else
+  sudo mkinitcpio -P
 fi
 
 # Install linux-lts kernel as fallback
@@ -427,6 +397,7 @@ then
 
   sudo pacman -Sy --needed wine wine-mono wine-gecko winetricks lutris samba gnutls lib32-gnutls --noconfirm
 
+  mkdir -p "${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts"
   cd ${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts && for i in /usr/share/fonts/**/*.{ttf,otf}; do ln -s "$i"; done
 
   sudo bash -c "cat << EOF > /tmp/fontsmoothing.reg
@@ -442,6 +413,8 @@ EOF"
   WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
 
   paru -Sy wine-installer --noconfirm
+
+  mkdir -p "$HOME/.local/share/applications/wine"
 
   cat << EOF > "$HOME/.local/share/applications/wine/wine-browsedrive.desktop"
 [Desktop Entry]
