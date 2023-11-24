@@ -26,6 +26,7 @@
   ],
   "smb": [
     {
+      "name": "file-share",
       "description": "SMB file share",
       "destination": "/mnt/file-share",
       "source": "//192.168.178.104/files",
@@ -33,6 +34,7 @@
       "password": "PASSWORD"
     },
     {
+      "name": "media-share",
       "description": "SMB media share",
       "destination": "/mnt/media-share",
       "source": "//192.168.178.104/media",
