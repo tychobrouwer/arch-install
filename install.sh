@@ -28,6 +28,12 @@ sudo locale-gen
 sudo localectl set-locale LANG=en_US.UTF-8
 sudo localectl set-locale LC_TIME=en_GB.UTF-8
 
+sudo sed -i 's/base udev/systemd/' /etc/mkinitcpio.conf
+sudo sed -i 's/fsck//' /etc/mkinitcpio.conf
+sudo mkinitcpio -P
+
+sudo systemctl mask systemd-fsck-root.service
+
 echo "-------------------------------------------------"
 echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
@@ -409,3 +415,79 @@ sudo cp /boot/loader/entries/*_linux-zen-fallback.conf /boot/loader/entries/linu
 
 sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts.conf
 sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts-fallback.conf
+
+#Install wine with lutris
+
+install_wine=$( jq -r ".install_wine" "$config_file" )
+if [ $install_wine == true ]
+then
+  echo "-------------------------------------------------"
+  echo "-----------------INSTALL WINE--------------------"
+  echo "-------------------------------------------------"
+
+  sudo pacman -Sy --needed wine wine-mono wine-gecko winetricks lutris samba gnutls lib32-gnutls --noconfirm
+
+  cd ${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts && for i in /usr/share/fonts/**/*.{ttf,otf}; do ln -s "$i"; done
+
+  sudo bash -c "cat << EOF > /tmp/fontsmoothing.reg
+REGEDIT4
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"FontSmoothing"="2"
+"FontSmoothingOrientation"=dword:00000001
+"FontSmoothingType"=dword:00000002
+"FontSmoothingGamma"=dword:00000578
+EOF"
+
+  WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
+
+  paru -Sy wine-installer --noconfirm
+
+  cat << EOF > "$HOME/.local/share/applications/wine/wine-browsedrive.desktop"
+[Desktop Entry]
+Name=Browse C: Drive
+Comment=Browse your virtual C: drive
+Exec=wine winebrowser c:
+Terminal=false
+Type=Application
+Icon=folder-wine
+Categories=Wine;
+EOF
+
+  cat << EOF > "$HOME/.local/share/applications/wine/wine-uninstaller.desktop"
+[Desktop Entry]
+Name=Uninstall Wine Software
+Comment=Uninstall Windows applications for Wine
+Exec=wine uninstaller
+Terminal=false
+Type=Application
+Icon=wine-uninstaller
+Categories=Wine;
+EOF
+
+  cat << EOF > "$HOME/.local/share/applications/wine/wine-winecfg.desktop"
+[Desktop Entry]
+Name=Configure Wine
+Comment=Change application-specific and general Wine options
+Exec=winecfg
+Terminal=false
+Icon=wine-winecfg
+Type=Application
+Categories=Wine;
+EOF
+
+  cat << EOF > "$HOME/.config/menus/applications-merged/wine.menu"
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+"http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Menu>
+    <Name>wine-wine</Name>
+    <Directory>wine-wine.directory</Directory>
+    <Include>
+      <Category>Wine</Category>
+    </Include>
+  </Menu>
+</Menu>
+EOF
+fi

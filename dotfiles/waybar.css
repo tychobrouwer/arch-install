@@ -32,14 +32,6 @@ window#waybar {
   margin-right: 10px;
 }
 
-#custom-virt-desktop-1 {
-  margin-left: 10px;
-}
-
-#custom-virt-desktop-3 {
-  margin-right: 5px;
-}
-
 #custom-virt-desktop-1,
 #custom-virt-desktop-2,
 #custom-virt-desktop-3 {
@@ -48,6 +40,14 @@ window#waybar {
   font-weight: bold;
   background-color: #454b50;
   border-radius: 1px;
+}
+
+#custom-virt-desktop-1 {
+  margin-left: 10px;
+}
+
+#custom-virt-desktop-3 {
+  margin-right: 5px;
 }
 
 #custom-virt-desktop-1.active,
