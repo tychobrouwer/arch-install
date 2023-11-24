@@ -307,7 +307,6 @@ echo "-------------------------------------------------"
 echo "-------------------CONFIGURE TLP-----------------"
 echo "-------------------------------------------------"
 
-
 is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
 if [ $is_thinkpad == true ]
 then
@@ -469,3 +468,55 @@ EOF
 </Menu>
 EOF
 fi
+
+# Setup smb client shares
+
+echo "-------------------------------------------------"
+echo "-----------------CONFIGURE SMB-------------------"
+echo "-------------------------------------------------"
+
+smb_n=$( jq -r ".smb.[].source" "$config_file" | wc -l )
+
+i=0;
+while [ $i -lt $wg_n ]
+do
+  _jq() {
+    echo $(jq -r ".smb.[$i]${1}" "$config_file")
+  }
+
+  smb_description=$(_jq '.description')
+  smb_destination=$(_jq '.destination')
+  smb_source=$(_jq '.source')
+  smb_username=$(_jq '.username')
+  smb_password=$(_jq '.password')
+
+  sudo bash -c "cat << EOF > /etc/cifspasswd-$i
+$smb_username
+$smb_password
+EOF"
+
+  sudo chmod 600 /etc/cifspasswd-$i
+
+  sudo bash -c "cat << EOF > /etc/systemd/system/mnt-$i.mount
+[Unit]
+Description=$smb_description
+RequiresMountsFor=/mnt
+Requires=network-online.service wg-quick@wg0
+After=network-online.service wg-quick@wg0
+
+[Mount]
+What=$smb_source
+Where=$smb_destination
+Type=cifs
+Options=uid=tychob,gid=tychob,_netdev,nofail,credentials=/etc/cifspasswd-$i
+TimeoutSec=10
+LazyUnmount=yes
+EOF"
+
+  sudo systemctl enable mnt-$i.mount
+  sudo systemctl start mnt-$i.mount
+
+  ((i=i+1))
+done
+
+

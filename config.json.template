@@ -6,24 +6,22 @@
   "install_wine": true,
   "wireguard": [
     {
-      "description": "Wireguard Private IPs VPN tunnel",
       "port": 51820,
       "private_key": "PRIVATE_KEY",
       "public_key": "PUBLIC_KEY",
       "address": "10.6.0.3/32",
       "server": "SERVER_IP",
-      "gateway": "192.168.178.1",
-      "allowed_ips": "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+      "allowed_ips": "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16",
+      "dns": "192.168.178.101"
     },
     {
-      "description": "Wireguard All IPs VPN tunnel",
       "port": 51820,
       "private_key": "PRIVATE_KEY",
       "public_key": "PUBLIC_KEY",
       "address": "10.6.0.3/32",
       "server": "SERVER_IP",
-      "gateway": "192.168.178.1",
-      "allowed_ips": "0.0.0.0/0"
+      "allowed_ips": "0.0.0.0/0",
+      "dns": "192.168.178.101"
     }
   ],
   "smb": [
@@ -31,13 +29,15 @@
       "description": "SMB file share",
       "destination": "/mnt/file-share",
       "source": "//192.168.178.104/files",
-      "credentials": "credentials=/etc/cifspasswd"
+      "username": "USERNAME",
+      "password": "PASSWORD"
     },
     {
       "description": "SMB media share",
       "destination": "/mnt/media-share",
       "source": "//192.168.178.104/media",
-      "credentials": "credentials=/etc/cifspasswd"
+      "username": "USERNAME",
+      "password": "PASSWORD"
     }
   ]
 }
