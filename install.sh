@@ -67,7 +67,6 @@ gitemail=$(jq -r '.gitemail' "$config_file")
 # Kopia autostart minimized script
 cat << EOF > "$HOME/.scripts/kopia-minimized.sh"
 #!/bin/bash
-while [[ \$(xdotool search --onlyvisible --name kopia) ]]; do :; done
 while [[ ! \$(xdotool search --onlyvisible --name kopia) ]]; do :; done
 xdotool search --onlyvisible --name kopia windowquit
 EOF
