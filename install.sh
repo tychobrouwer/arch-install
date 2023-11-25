@@ -50,7 +50,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie --noconfirm --skipreview
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
@@ -72,7 +72,18 @@ Version=1.0
 Name=kopia-ui
 Comment=koipia-uistartup script
 Exec=/opt/KopiaUI/kopia-ui
-ExecStartPost=
+StartupNotify=false
+Terminal=false
+EOF
+
+# Create Whatsie auto start script
+cat << EOF > "$HOME/.config/autostart/whatsie.desktop"
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=whatsie
+Comment=whatsie startup script
+Exec=/usr/bin/whatsie
 StartupNotify=false
 Terminal=false
 EOF
@@ -108,7 +119,7 @@ sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 # Spotify autostart minimized script
 cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
-spotify &
+spotify --url='' &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify windowquit
 EOF

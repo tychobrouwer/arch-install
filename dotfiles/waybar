@@ -35,12 +35,12 @@
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
-    "restart-interval": 10
+    "restart-interval": 1
   },
   "custom/virt-desktop-1": {
     "exec": "/etc/xdg/waybar/virt-desktop-checker.sh 1",
     "on-click": "ydotool key 29:1 59:1 59:0 29:0",
-    "restart-interval": 10,
+    "restart-interval": 1,
     "return-type": "json"
   },
   "custom/virt-desktop-2": {
