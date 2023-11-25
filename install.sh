@@ -64,15 +64,6 @@ mkdir -p "$HOME/.config/autostart"
 gitname=$(jq -r '.gitname' "$config_file")
 gitemail=$(jq -r '.gitemail' "$config_file")
 
-# Kopia autostart minimized script
-cat << EOF > "$HOME/.scripts/kopia-minimized.sh"
-#!/bin/bash
-while [[ ! \$(xdotool search --onlyvisible --name kopia) ]]; do :; done
-xdotool search --onlyvisible --name kopia windowquit
-EOF
-
-sudo chmod +x "$HOME/.scripts/kopia-minimized.sh"
-
 # Create kopia startup script
 cat << EOF > "$HOME/.config/autostart/kopia-ui.desktop"
 [Desktop Entry]
@@ -80,7 +71,7 @@ Type=Application
 Version=1.0
 Name=kopia-ui
 Comment=koipia-uistartup script
-Exec=/bin/bash -c "/opt/KopiaUI/kopia-ui && $HOME/.scripts/kopia-minimized.sh"
+Exec=/opt/KopiaUI/kopia-ui
 ExecStartPost=
 StartupNotify=false
 Terminal=false
@@ -513,6 +504,8 @@ do
   smb_source=$(_jq '.source')
   smb_username=$(_jq '.username')
   smb_password=$(_jq '.password')
+
+  mkdir -p "$smb_destination"
 
   sudo bash -c "cat << EOF > /etc/cifspasswd-$i
 username=$smb_username
