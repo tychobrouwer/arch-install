@@ -9,7 +9,7 @@
 }
 
 window#waybar {
-  background-color: #26292e;
+  background-color: #1d1d1d;
   color: #dfdfdf;
   border-bottom: #454b50 1px solid;
 }
@@ -54,7 +54,7 @@ window#waybar {
 #custom-virt-desktop-2.active,
 #custom-virt-desktop-3.active {
   background-color: #dfdfdf;
-  color: #26292e;
+  color: #1d1d1d;
 }
 
 #battery {
@@ -67,7 +67,7 @@ window#waybar {
 
 #battery.warning:not(.charging) {
   background-color: #f7768e;
-  color: #26292e;
+  color: #1d1d1d;
   border-radius: 5px 5px 5px 5px;
 }
 

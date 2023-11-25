@@ -50,7 +50,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsapp-for-linux --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsapp-for-linux --noconfirm --skipreview
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
