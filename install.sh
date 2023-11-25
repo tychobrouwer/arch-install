@@ -83,7 +83,8 @@ Type=Application
 Version=1.0
 Name=whatsie
 Comment=whatsie startup script
-Exec=/usr/bin/whatsie
+Exec=/usr/bin/whatsie %u
+StartupWMClass=whatsie
 StartupNotify=false
 Terminal=false
 EOF
