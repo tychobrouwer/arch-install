@@ -50,7 +50,9 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git --noconfirm --skipreview
+
+cp /usr/share/applications/net.lutris.Lutris.desktop "$HOME/.local/share/applications/net.lutris.Lutris.desktop"
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
@@ -161,16 +163,11 @@ fi
 sudo ./install.sh
 
 # Enable Dolphin folder color
-if [ ! -d "$reposdir/papirus-folders" ]
-then
-  git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "$reposdir/papirus-folders"
-  cd "$reposdir/papirus-folders"
-else
-  cd "$reposdir/papirus-folders"
-  git pull
-  git rebase
-fi
+git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "/tmp/papirus-folders"
+cd "/tmp/papirus-folders"
 ./install.sh
+
+rm -rf "/tmp/papirus-folders"
 
 # Set Dolphin state (mainly for visible panels)
 cat << EOF > "$HOME/.local/share/dolphin/dolphinstaterc"
