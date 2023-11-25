@@ -53,7 +53,7 @@ fi
 paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git --noconfirm --skipreview
 
 # Configure gtk apps to use gtk3-nocsd
-gtk_apps=(org.lutris.Lutris.desktop)
+gtk_apps=(net.lutris.Lutris.desktop)
 for app in "${gtk_apps[@]}"
 do
   [ ! -f "/usr/share/applications/$app" ] && continue
