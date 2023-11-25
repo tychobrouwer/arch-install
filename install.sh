@@ -50,7 +50,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsapp-for-linux --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin --noconfirm --skipreview
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
@@ -75,25 +75,6 @@ Exec=/opt/KopiaUI/kopia-ui
 ExecStartPost=
 StartupNotify=false
 Terminal=false
-EOF
-
-# Set whatsapp-for-linux config
-cat << EOF > "$HOME/.config/whatsapp-for-linux/settings.conf"
-[web]
-allow-permissions=true
-hw-accel=1
-min-font-size=0
- 
-[general]
-close-to-tray=false
-start-in-tray=false
-start-minimized=false
-header-bar=true
-zoom-level=1
-notification-sounds=true
-
-[appearance]
-prefer-dark-theme=true
 EOF
 
 # Install oh-my-zsh
