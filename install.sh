@@ -492,7 +492,7 @@ echo "-------------------------------------------------"
 smb_n=$( jq -r ".smb.[].source" "$config_file" | wc -l )
 
 i=0;
-while [ $i -lt $wg_n ]
+while [ $i -lt $smb_n ]
 do
   _jq() {
     echo $(jq -r ".smb.[$i]${1}" "$config_file")
