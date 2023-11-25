@@ -50,7 +50,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin downgrade --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsapp-for-linux --noconfirm --skipreview
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
@@ -75,6 +75,25 @@ Exec=/opt/KopiaUI/kopia-ui
 ExecStartPost=
 StartupNotify=false
 Terminal=false
+EOF
+
+# Set whatsapp-for-linux config
+cat << EOF > "$HOME/.config/whatsapp-for-linux/settings.conf"
+[web]
+allow-permissions=true
+hw-accel=1
+min-font-size=0
+ 
+[general]
+close-to-tray=false
+start-in-tray=false
+start-minimized=false
+header-bar=true
+zoom-level=1
+notification-sounds=true
+
+[appearance]
+prefer-dark-theme=true
 EOF
 
 # Install oh-my-zsh
@@ -431,56 +450,6 @@ EOF"
   WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
 
   paru -Sy wine-installer --noconfirm
-
-  mkdir -p "$HOME/.local/share/applications/wine"
-
-  cat << EOF > "$HOME/.local/share/applications/wine/wine-browsedrive.desktop"
-[Desktop Entry]
-Name=Browse C: Drive
-Comment=Browse your virtual C: drive
-Exec=wine winebrowser c:
-Terminal=false
-Type=Application
-Icon=folder-wine
-Categories=Wine;
-EOF
-
-  cat << EOF > "$HOME/.local/share/applications/wine/wine-uninstaller.desktop"
-[Desktop Entry]
-Name=Uninstall Wine Software
-Comment=Uninstall Windows applications for Wine
-Exec=wine uninstaller
-Terminal=false
-Type=Application
-Icon=wine-uninstaller
-Categories=Wine;
-EOF
-
-  cat << EOF > "$HOME/.local/share/applications/wine/wine-winecfg.desktop"
-[Desktop Entry]
-Name=Configure Wine
-Comment=Change application-specific and general Wine options
-Exec=winecfg
-Terminal=false
-Icon=wine-winecfg
-Type=Application
-Categories=Wine;
-EOF
-
-  cat << EOF > "$HOME/.config/menus/applications-merged/wine.menu"
-<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-"http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
-<Menu>
-  <Name>Applications</Name>
-  <Menu>
-    <Name>wine-wine</Name>
-    <Directory>wine-wine.directory</Directory>
-    <Include>
-      <Category>Wine</Category>
-    </Include>
-  </Menu>
-</Menu>
-EOF
 fi
 
 # Setup smb client shares
