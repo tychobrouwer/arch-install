@@ -52,7 +52,15 @@ fi
 # Install paru packages
 paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git --noconfirm --skipreview
 
-cp /usr/share/applications/net.lutris.Lutris.desktop "$HOME/.local/share/applications/net.lutris.Lutris.desktop"
+# Configure gtk apps to use gtk3-nocsd
+gtk_apps=(org.lutris.Lutris.desktop)
+for app in "${gtk_apps[@]}"
+do
+  [ ! -f "/usr/share/applications/$app" ] && continue
+  
+  cp /usr/share/applications/$app "$HOME/.local/share/applications/$app"
+  sed -i 's/Exec=/Exec=\/usr\/bin\/gtk3-nocsd /g' "$HOME/.local/share/applications/$app"
+done
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
