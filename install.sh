@@ -411,7 +411,7 @@ then
   sudo pacman -Sy --needed wine wine-mono wine-gecko winetricks lutris samba gnutls lib32-gnutls --noconfirm
 
   mkdir -p "${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts"
-  cd ${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts && for i in /usr/share/fonts/**/*.{ttf,otf}; do ln -s "$i"; done
+  cd ${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts && for i in /usr/share/fonts/**/*.{ttf,otf}; do ln -s "$i" >/dev/null 2>&1; done
 
   sudo bash -c "cat << EOF > /tmp/fontsmoothing.reg
 REGEDIT4
@@ -425,7 +425,7 @@ EOF"
 
   WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
 
-  rm /tmp/fontsmoothing.reg
+  sudo rm -rf /tmp/fontsmoothing.reg
 
   paru -Sy wine-installer --noconfirm
 fi
