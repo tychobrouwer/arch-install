@@ -52,53 +52,6 @@ fi
 # Install paru packages
 paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin --noconfirm --skipreview
 
-# Configure gtk apps to use gtk3-nocsd
-gtk_apps=(net.lutris.Lutris.desktop)
-for app in "${gtk_apps[@]}"
-do
-  [ ! -f "/usr/share/applications/$app" ] && continue
-  
-  cp /usr/share/applications/$app "$HOME/.local/share/applications/$app"
-  sed -i 's/Exec=/Exec=\/usr\/bin\/gtk3-nocsd /g' "$HOME/.local/share/applications/$app"
-done
-
-# Get variables
-reposdirname=$(jq -r '.reposdirname' "./config.json")
-reposdir="$HOME/$reposdirname"
-config_file="$reposdir/arch-install/config.json"
-
-mkdir -p "$reposdir"
-mkdir -p "$HOME/.scripts"
-mkdir -p "$HOME/.config/autostart"
-
-gitname=$(jq -r '.gitname' "$config_file")
-gitemail=$(jq -r '.gitemail' "$config_file")
-
-# Create kopia startup script
-cat << EOF > "$HOME/.config/autostart/kopia-ui.desktop"
-[Desktop Entry]
-Type=Application
-Version=1.0
-Name=kopia-ui
-Comment=koipia-uistartup script
-Exec=/opt/KopiaUI/kopia-ui
-StartupNotify=false
-Terminal=false
-EOF
-
-# Create Whatsie auto start script
-cat << EOF > "$HOME/.config/autostart/whatsie.desktop"
-[Desktop Entry]
-Type=Application
-Version=1.0
-Name=whatsie
-Comment=whatsie startup script
-Exec=/usr/bin/whatsie %u
-StartupWMClass=whatsie
-StartupNotify=false
-Terminal=false
-EOF
-
 # Install oh-my-zsh
 echo "-------------------------------------------------"
 echo "-----------------CONFIGURE ZSH-------------------"
@@ -173,7 +126,7 @@ sudo ./install.sh
 # Enable Dolphin folder color
 git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "/tmp/papirus-folders"
 cd "/tmp/papirus-folders"
-./install.sh
+./install.sh > /dev/null
 
 rm -rf "/tmp/papirus-folders"
 
@@ -240,55 +193,6 @@ fi
 sudo systemctl enable sshd.service
 sudo systemctl start sshd.service
 
-# Apply customizations
-echo "-------------------------------------------------"
-echo "---------------APPLY CUSTOMIZATIONS--------------"
-echo "-------------------------------------------------"
-
-# Set kwinrc settings
-kwriteconfig5 --file "$HOME/.config/kwinrc" --group Desktops --key Number 3
-kwriteconfig5 --file "$HOME/.config/ktimezonedrc" --group TimeZones --key LocalZone Europe/Amsterdam
-
-# Set nodisplay for applications from launcher
-application_desktop_files=(
-  "/usr/share/applications/avahi-discover.desktop"
-  "/usr/share/applications/bssh.desktop"
-  "/usr/share/applications/bvnc.desktop"
-  "/usr/share/applications/assistant.desktop"
-  "/usr/share/applications/designer.desktop"
-  "/usr/share/applications/linguist.desktop"
-  "/usr/share/applications/qdbusviewer.desktop"
-  "/usr/share/applications/qv4l2.desktop"
-  "/usr/share/applications/qvidcap.desktop"
-  "/usr/share/applications/org.kde.plasma-welcome.desktop"
-  "/usr/share/applications/org.kde.plasma.emojier.desktop"
-  "/usr/share/applications/org.kde.kinfocenter.desktop"
-  "/usr/share/applications/org.kde.kuserfeedback-console.desktop"
-  "/usr/share/applications/thorium-shell.desktop"
-  "/usr/share/applications/cmake-gui.desktop"
-)
-
-for desktop_file in "${application_desktop_files[@]}"
-do
-  [ ! -f "$desktop_file" ] && continue
-  
-  sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
-done
-
-sudo bash -c "cat << EOF > $HOME/.local/share/applications//spotify.desktop
-[Desktop Entry]
-Type=Application
-Name=Spotify
-GenericName=Music Player
-Icon=spotify-client
-TryExec=spotify
-Exec=spotify
-Terminal=false
-MimeType=x-scheme-handler/spotify;
-Categories=Audio;Music;Player;AudioVideo;
-StartupWMClass=spotify
-EOF"
-
 # Configure Wireguard
 echo "-------------------------------------------------"
 echo "-----------------CONFIGURE WIREGUARD-------------"
@@ -333,13 +237,14 @@ sudo systemctl enable wg-quick@wg0.service
 sudo systemctl start wg-quick@wg0.service
 
 # TLP setup
-echo "-------------------------------------------------"
-echo "-------------------CONFIGURE TLP-----------------"
-echo "-------------------------------------------------"
 
 is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
 if [ $is_thinkpad == true ]
 then
+  echo "-------------------------------------------------"
+  echo "-------------------CONFIGURE TLP-----------------"
+  echo "-------------------------------------------------"
+
   sudo pacman -Sy --needed tlp --noconfirm
 
   echo "Setting theshold for battery charge (start/stop): 75/80" 
@@ -408,7 +313,7 @@ fi
 # Install linux-lts kernel as fallback
 
 echo "-------------------------------------------------"
-echo "-----------------INSTALL LINUX-LTS---------------"
+echo "-----------INSTALL LINUX-LTS KERNEL--------------"
 echo "-------------------------------------------------"
 
 sudo pacman -Sy --needed linux-lts linux-lts-headers --noconfirm
@@ -506,4 +411,117 @@ EOF"
   ((i=i+1))
 done
 
+# Install ProtonGE for Steam
 
+install_proton_ge=$( jq -r ".install_proton_ge" "$config_file" )
+
+if [ $install_proton_ge == true ]
+then
+  echo "-------------------------------------------------"
+  echo "----------------INSTALL PROTONGE-----------------"
+  echo "-------------------------------------------------"
+
+  mkdir -p "$HOME/.steam/root/compatibilitytools.d"
+
+  wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-25/GE-Proton8-25.tar.gz -O /tmp/GE-Proton.tar.gz
+
+  tar -xf /tmp/GE-Proton.tar.gz -C "$HOME/.steam/root/compatibilitytools.d"
+fi
+
+# Apply customizations
+echo "-------------------------------------------------"
+echo "---------------APPLY CUSTOMIZATIONS--------------"
+echo "-------------------------------------------------"
+
+# Configure gtk apps to use gtk3-nocsd
+gtk_apps=(net.lutris.Lutris.desktop)
+for app in "${gtk_apps[@]}"
+do
+  [ ! -f "/usr/share/applications/$app" ] && continue
+  
+  cp /usr/share/applications/$app "$HOME/.local/share/applications/$app"
+  sed -i 's/Exec=/Exec=\/usr\/bin\/gtk3-nocsd /g' "$HOME/.local/share/applications/$app"
+done
+
+# Get variables
+reposdirname=$(jq -r '.reposdirname' "./config.json")
+reposdir="$HOME/$reposdirname"
+config_file="$reposdir/arch-install/config.json"
+
+mkdir -p "$reposdir"
+mkdir -p "$HOME/.scripts"
+mkdir -p "$HOME/.config/autostart"
+
+gitname=$(jq -r '.gitname' "$config_file")
+gitemail=$(jq -r '.gitemail' "$config_file")
+
+# Create kopia startup script
+cat << EOF > "$HOME/.config/autostart/kopia-ui.desktop"
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=kopia-ui
+Comment=koipia-uistartup script
+Exec=/opt/KopiaUI/kopia-ui
+StartupNotify=false
+Terminal=false
+EOF
+
+# Create Whatsie auto start script
+cat << EOF > "$HOME/.config/autostart/whatsie.desktop"
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=whatsie
+Comment=whatsie startup script
+Exec=/usr/bin/whatsie %u
+StartupWMClass=whatsie
+StartupNotify=false
+Terminal=false
+EOF
+
+# Set kwinrc settings
+kwriteconfig5 --file "$HOME/.config/kwinrc" --group Desktops --key Number 3
+kwriteconfig5 --file "$HOME/.config/ktimezonedrc" --group TimeZones --key LocalZone Europe/Amsterdam
+
+# Set nodisplay for applications from launcher
+application_desktop_files=(
+  "/usr/share/applications/avahi-discover.desktop"
+  "/usr/share/applications/bssh.desktop"
+  "/usr/share/applications/bvnc.desktop"
+  "/usr/share/applications/assistant.desktop"
+  "/usr/share/applications/designer.desktop"
+  "/usr/share/applications/linguist.desktop"
+  "/usr/share/applications/qdbusviewer.desktop"
+  "/usr/share/applications/qv4l2.desktop"
+  "/usr/share/applications/qvidcap.desktop"
+  "/usr/share/applications/org.kde.plasma-welcome.desktop"
+  "/usr/share/applications/org.kde.plasma.emojier.desktop"
+  "/usr/share/applications/org.kde.kinfocenter.desktop"
+  "/usr/share/applications/org.kde.kuserfeedback-console.desktop"
+  "/usr/share/applications/thorium-shell.desktop"
+  "/usr/share/applications/cmake-gui.desktop"
+  "/usr/share/applications/jconsole-java-openjdk.desktop"
+  "/usr/share/applications/jshell-java-openjdk.desktop"
+)
+
+for desktop_file in "${application_desktop_files[@]}"
+do
+  [ ! -f "$desktop_file" ] && continue
+  
+  sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
+done
+
+sudo bash -c "cat << EOF > $HOME/.local/share/applications//spotify.desktop
+[Desktop Entry]
+Type=Application
+Name=Spotify
+GenericName=Music Player
+Icon=spotify-client
+TryExec=spotify
+Exec=spotify
+Terminal=false
+MimeType=x-scheme-handler/spotify;
+Categories=Audio;Music;Player;AudioVideo;
+StartupWMClass=spotify
+EOF"

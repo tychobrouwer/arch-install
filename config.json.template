@@ -4,6 +4,7 @@
   "reposdirname": "Repositories",
   "is_thinkpad": false,
   "install_wine": true,
+  "install_proton_ge": true,
   "wireguard": [
     {
       "port": 51820,
