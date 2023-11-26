@@ -99,6 +99,8 @@ EOF
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
+sudo sed -i 's/elif artist is not None and title is not None:/elif artist is not None and title is not None and artist is not "":/g' /etc/xdg/waybar/mediaplayer.py
+
 # Spotify autostart minimized script
 cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
