@@ -2,9 +2,9 @@
 
 # Get variables
 current_dir=$(pwd)
-reposdirname=$(jq -r '.reposdirname' "$current_dir/config.json")
+config_file="$current_dir/config.json"
+reposdirname=$(jq -r '.reposdirname' "$config_file")
 reposdir="$HOME/$reposdirname"
-config_file="$reposdir/arch-install/config.json"
 
 mkdir -p "$reposdir"
 mkdir -p "$HOME/.scripts"
