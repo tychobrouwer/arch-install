@@ -62,6 +62,8 @@ then
   git clone https://aur.archlinux.org/paru.git /tmp/paru
   cd /tmp/paru || exit
   makepkg -si
+
+  cd "$HOME"
   rm -rf /tmp/paru
 fi
 
@@ -144,6 +146,8 @@ git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "/tmp/pa
 cd "/tmp/papirus-folders"
 ./install.sh > /dev/null
 
+
+cd "$HOME"
 rm -rf "/tmp/papirus-folders"
 
 # Set Dolphin state (mainly for visible panels)
@@ -425,6 +429,7 @@ EOF"
 
   WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
 
+  cd "$HOME"
   sudo rm -rf /tmp/fontsmoothing.reg
 
   paru -Sy wine-installer --noconfirm
