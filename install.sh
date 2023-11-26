@@ -12,6 +12,10 @@ mkdir -p "$HOME/.config/autostart"
 gitname=$(jq -r '.gitname' "$config_file")
 gitemail=$(jq -r '.gitemail' "$config_file")
 
+# Set git config
+git config --global user.name "$gitname"
+git config --global user.email "$gitemail"
+
 echo "-------------------------------------------------"
 echo "------------------- ARCH SETUP ------------------"
 echo "-------------------------------------------------"
@@ -458,6 +462,32 @@ do
   cp /usr/share/applications/$app "$HOME/.local/share/applications/$app"
   sed -i 's/Exec=/Exec=\/usr\/bin\/gtk3-nocsd /g' "$HOME/.local/share/applications/$app"
 done
+
+# Configure MangoHud
+mkdir -p "$HOME/.config/MangoHud"
+cat << EOF > "$HOME/.config/MangoHud/MangoHud.conf"
+fps_limit=120
+font_size=26
+position=top-left
+
+cpu_stats
+gpu_stats
+arch
+frame_timing
+
+no_display
+background_alpha=0.0
+alpha=0.8
+toggle_hud=KP_Subtract
+toggle_logging=F2
+reload_cfg=F4
+
+gpu_color=ffffff
+cpu_color=ffffff
+engine_color=ffffff
+frametime_color=ffffff
+text_color=ffffff
+EOF
 
 # Create kopia startup script
 cat << EOF > "$HOME/.config/autostart/kopia-ui.desktop"
