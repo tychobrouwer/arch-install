@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Get variables
+reposdirname=$(jq -r '.reposdirname' "./config.json")
+reposdir="$HOME/$reposdirname"
+config_file="$reposdir/arch-install/config.json"
+
+mkdir -p "$reposdir"
+mkdir -p "$HOME/.scripts"
+mkdir -p "$HOME/.config/autostart"
+
+gitname=$(jq -r '.gitname' "$config_file")
+gitemail=$(jq -r '.gitemail' "$config_file")
+
 echo "-------------------------------------------------"
 echo "------------------- ARCH SETUP ------------------"
 echo "-------------------------------------------------"
@@ -185,6 +197,7 @@ cp -sf "$dotfilesdir/pip.conf" "$HOME/.config/pip/pip.conf"
 echo "-------------------------------------------------"
 echo "------------------CONFIGURE SSH------------------"
 echo "-------------------------------------------------"
+
 if [ ! -f "$HOME/.ssh/id_ed25519" ]
 then
   ssh-keygen -q -t ed25519 -a 100 -f "$HOME/.ssh/id_ed25519" -N ''
@@ -326,35 +339,6 @@ sudo cp /boot/loader/entries/*_linux-zen-fallback.conf /boot/loader/entries/linu
 sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts.conf
 sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts-fallback.conf
 
-#Install wine with lutris
-
-install_wine=$( jq -r ".install_wine" "$config_file" )
-if [ $install_wine == true ]
-then
-  echo "-------------------------------------------------"
-  echo "-----------------INSTALL WINE--------------------"
-  echo "-------------------------------------------------"
-
-  sudo pacman -Sy --needed wine wine-mono wine-gecko winetricks lutris samba gnutls lib32-gnutls --noconfirm
-
-  mkdir -p "${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts"
-  cd ${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts && for i in /usr/share/fonts/**/*.{ttf,otf}; do ln -s "$i"; done
-
-  sudo bash -c "cat << EOF > /tmp/fontsmoothing.reg
-REGEDIT4
-
-[HKEY_CURRENT_USER\Control Panel\Desktop]
-"FontSmoothing"="2"
-"FontSmoothingOrientation"=dword:00000001
-"FontSmoothingType"=dword:00000002
-"FontSmoothingGamma"=dword:00000578
-EOF"
-
-  WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
-
-  paru -Sy wine-installer --noconfirm
-fi
-
 # Setup smb client shares
 
 echo "-------------------------------------------------"
@@ -411,6 +395,37 @@ EOF"
   ((i=i+1))
 done
 
+#Install wine with lutris
+
+install_wine=$( jq -r ".install_wine" "$config_file" )
+if [ $install_wine == true ]
+then
+  echo "-------------------------------------------------"
+  echo "-----------------INSTALL WINE--------------------"
+  echo "-------------------------------------------------"
+
+  sudo pacman -Sy --needed wine wine-mono wine-gecko winetricks lutris samba gnutls lib32-gnutls --noconfirm
+
+  mkdir -p "${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts"
+  cd ${WINEPREFIX:-~/.wine}/drive_c/windows/Fonts && for i in /usr/share/fonts/**/*.{ttf,otf}; do ln -s "$i"; done
+
+  sudo bash -c "cat << EOF > /tmp/fontsmoothing.reg
+REGEDIT4
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"FontSmoothing"="2"
+"FontSmoothingOrientation"=dword:00000001
+"FontSmoothingType"=dword:00000002
+"FontSmoothingGamma"=dword:00000578
+EOF"
+
+  WINE=${WINE:-wine} WINEPREFIX=${WINEPREFIX:-$HOME/.wine} $WINE regedit /tmp/fontsmoothing.reg 2> /dev/null
+
+  rm /tmp/fontsmoothing.reg
+
+  paru -Sy wine-installer --noconfirm
+fi
+
 # Install ProtonGE for Steam
 
 install_proton_ge=$( jq -r ".install_proton_ge" "$config_file" )
@@ -426,6 +441,7 @@ then
   wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-25/GE-Proton8-25.tar.gz -O /tmp/GE-Proton.tar.gz
 
   tar -xf /tmp/GE-Proton.tar.gz -C "$HOME/.steam/root/compatibilitytools.d"
+  rm /tmp/GE-Proton.tar.gz
 fi
 
 # Apply customizations
@@ -442,18 +458,6 @@ do
   cp /usr/share/applications/$app "$HOME/.local/share/applications/$app"
   sed -i 's/Exec=/Exec=\/usr\/bin\/gtk3-nocsd /g' "$HOME/.local/share/applications/$app"
 done
-
-# Get variables
-reposdirname=$(jq -r '.reposdirname' "./config.json")
-reposdir="$HOME/$reposdirname"
-config_file="$reposdir/arch-install/config.json"
-
-mkdir -p "$reposdir"
-mkdir -p "$HOME/.scripts"
-mkdir -p "$HOME/.config/autostart"
-
-gitname=$(jq -r '.gitname' "$config_file")
-gitemail=$(jq -r '.gitemail' "$config_file")
 
 # Create kopia startup script
 cat << EOF > "$HOME/.config/autostart/kopia-ui.desktop"
@@ -512,7 +516,7 @@ do
   sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
 done
 
-sudo bash -c "cat << EOF > $HOME/.local/share/applications//spotify.desktop
+sudo bash -c "cat << EOF > $HOME/.local/share/applications/spotify.desktop
 [Desktop Entry]
 Type=Application
 Name=Spotify
