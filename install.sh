@@ -2,7 +2,7 @@
 
 # Get variables
 reposdirname=$(jq -r '.reposdirname' "./config.json")
-reposdir="$HOME/$reposdirname"
+reposdir="$HOME$reposdirname"
 config_file="$reposdir/arch-install/config.json"
 
 mkdir -p "$reposdir"
