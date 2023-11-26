@@ -307,7 +307,6 @@ then
 
   sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
   sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
-  sudo mkinitcpio -P
 
   sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*_linux-zen.conf
 
@@ -327,9 +326,14 @@ When=PostTransaction
 NeedsTargets
 Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 EOF"
-else
-  sudo mkinitcpio -P
 fi
+
+# Update initramfs
+echo "-------------------------------------------------"
+echo "-----------------UPDATE INITRAMFS----------------"
+echo "-------------------------------------------------"
+
+sudo mkinitcpio -P
 
 # Install linux-lts kernel as fallback
 
