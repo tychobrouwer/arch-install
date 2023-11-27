@@ -592,11 +592,11 @@ do
 
     mkdir -p /usr/share/icons/test/icons/"$size"x"$size"/apps
 
-    inkscape -z -e /usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
+    inkscape --export-filename=/usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
 
     if [ $size -eq 96 ] || [ $size -eq 128 ]
     then
-      inkscape -z -e /usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
+      inkscape --export-filename=/usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
     fi
   done
 done
