@@ -590,6 +590,8 @@ do
   do
     file_name=$(basename "$icon")
 
+    mkdir -p /usr/share/icons/test/icons/"$size"x"$size"/apps
+
     inkscape -z -e /usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
 
     if [ $size -eq 96 ] || [ $size -eq 128 ]
