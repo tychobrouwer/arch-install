@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono ttf-ms-win10-cdn zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager kdf firefox timeshift --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono ttf-ms-win10-cdn zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -566,28 +566,6 @@ echo "-------------------------------------------------"
 echo "-----------------CUSTOMIZE ICONS-----------------"
 echo "-------------------------------------------------"
 
-icon_sizes=(16 22 24 32 42 48 64 96 128)
+# fix kopia tray icon
 
-# 96x96 icons are 48x48
-# 128x128 icons are 64x64
-
-icons="$current_dir/icons/*"
-
-for size in "${icon_sizes[@]}"
-do
-  for icon in $icons
-  do
-    file_name=$(basename "$icon")
-
-    sudo mkdir -p /usr/share/icons/test/icons/"$size"x"$size"/apps
-
-    sudo inkscape --export-filename=/usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
-
-    if [ $size -eq 96 ] || [ $size -eq 128 ]
-    then
-      sudo mkdir -p /usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps
-
-      sudo inkscape --export-filename=/usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
-    fi
-  done
-done
+sudo cp -f "$current_dir/icons/kopia.png" "/opt/KopiaUI/resources/icons/kopia-tray.png"
