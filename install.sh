@@ -149,7 +149,6 @@ git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "/tmp/pa
 cd "/tmp/papirus-folders"
 ./install.sh > /dev/null
 
-
 cd "$HOME"
 rm -rf "/tmp/papirus-folders"
 
@@ -571,3 +570,31 @@ MimeType=x-scheme-handler/spotify;
 Categories=Audio;Music;Player;AudioVideo;
 StartupWMClass=spotify
 EOF"
+
+# Customize application icons
+
+echo "-------------------------------------------------"
+echo "-----------------CUSTOMIZE ICONS-----------------"
+echo "-------------------------------------------------"
+
+icon_sizes=(16 22 24 32 42 48 64 96 128)
+
+# 96x96 icons are 48x48
+# 128x128 icons are 64x64
+
+icons="$current_dir/icons/*"
+
+for size in "${icon_sizes[@]}"
+do
+  for icon in $icons
+  do
+    file_name=$(basename "$icon")
+
+    inkscape -z -e /usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
+
+    if [ $size -eq 96 ] || [ $size -eq 128 ]
+    then
+      inkscape -z -e /usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
+    fi
+  done
+done
