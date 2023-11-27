@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono ttf-ms-win10-cdn zsh kvantum openssh lib32-systemd steam neofetch papirus-icon-theme gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager kdf firefox timeshift --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono ttf-ms-win10-cdn zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager kdf firefox timeshift --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -144,14 +144,6 @@ else
 fi
 sudo ./install.sh
 
-# Enable Dolphin folder color
-git clone https://github.com/PapirusDevelopmentTeam/papirus-folders.git "/tmp/papirus-folders"
-cd "/tmp/papirus-folders"
-./install.sh > /dev/null
-
-cd "$HOME"
-rm -rf "/tmp/papirus-folders"
-
 # Set Dolphin state (mainly for visible panels)
 cat << EOF > "$HOME/.local/share/dolphin/dolphinstaterc"
 [SettingsDialog]
@@ -162,9 +154,6 @@ cat << EOF > "$HOME/.local/share/dolphin/dolphinstaterc"
 1280x800 screen: Window-Maximized=true
 State=AAAA/wAAAAD9AAAAAwAAAAAAAAC0AAAClfwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAyAAABPgAAAFQA////+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAyAAAClQAAAF4A////AAAAAQAAALQAAAKV/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAADIAAAKVAAAAhgD///8AAAADAAAFAAAAAMz8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAAAAAFAAAAAAIA////AAAESAAAApUAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAA=
 EOF
-
-# Set papirus folder theme
-papirus-folders -C yaru --theme Papirus-Dark
 
 # Set sddm settings
 sudo bash -c "cat << EOF > /etc/sddm.conf.d/kde_settings.conf
