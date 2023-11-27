@@ -590,13 +590,15 @@ do
   do
     file_name=$(basename "$icon")
 
-    mkdir -p /usr/share/icons/test/icons/"$size"x"$size"/apps
+    sudo mkdir -p /usr/share/icons/test/icons/"$size"x"$size"/apps
 
-    inkscape --export-filename=/usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
+    sudo inkscape --export-filename=/usr/share/icons/test/icons/"$size"x"$size"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
 
     if [ $size -eq 96 ] || [ $size -eq 128 ]
     then
-      inkscape --export-filename=/usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
+      sudo mkdir -p /usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps
+
+      sudo inkscape --export-filename=/usr/share/icons/test/icons/"${size*2}"x"${size*2}"/apps/"$file_name".svg -w "$size" -h "$size" "$icon"
     fi
   done
 done
