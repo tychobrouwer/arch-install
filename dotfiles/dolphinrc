@@ -14,7 +14,7 @@ ShowViewMode=false
 [DetailsMode]
 ExpandableFolders=false
 IconSize=22
-PreviewSize=32
+PreviewSize=22
 
 [General]
 ConfirmClosingMultipleTabs=false
