@@ -106,9 +106,9 @@ cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify-launcher -- --uri="spotify:playlist:37i9dQZF1E35Ag8qP76jT0" &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
-xdotool search --onlyvisible --name spotify windowquit
+xdotool search --onlyvisible --name spotify windowminimize
 sleep 1
-xdotool search --onlyvisible --name spotify windowquit
+xdotool search --onlyvisible --name spotify windowminimize
 EOF
 
 sudo cp -f "$reposdir/arch-install/scripts/virt-desktop-checker.sh" "/etc/xdg/waybar/virt-desktop-checker.sh"
