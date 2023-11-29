@@ -14,7 +14,7 @@ ShowViewMode=false
 [DetailsMode]
 ExpandableFolders=false
 IconSize=22
-PreviewSize=22
+PreviewSize=32
 
 [General]
 ConfirmClosingMultipleTabs=false
@@ -24,7 +24,7 @@ ShowFullPath=true
 ShowFullPathInTitlebar=true
 SortingChoice=CaseInsensitiveSorting
 Version=202
-ViewPropsTimestamp=2023,11,1,23,39,14.899000000000001
+ViewPropsTimestamp=2023,11,28,19,33,2.189
 
 [IconsMode]
 IconSize=22
@@ -37,6 +37,8 @@ Places Icons Static Size=22
 [KPropertiesDialog]
 1280x800 screen: Height=568
 1280x800 screen: Width=466
+1536x864 screen: Height=532
+1536x864 screen: Width=438
 2358x1280 screen: Height=532
 2358x1280 screen: Width=440
 

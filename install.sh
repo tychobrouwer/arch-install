@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono ttf-ms-win10-cdn zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -69,7 +69,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -89,6 +89,7 @@ echo "----------------CONFIGURE WAYBAR-----------------"
 echo "-------------------------------------------------"
 
 # sudo sensors-detect
+mkdir -p
 cat << EOF > "$HOME/.config/autostart/waybar.desktop"
 [Desktop Entry]
 Type=Application
@@ -99,7 +100,7 @@ EOF
 sudo wget https://raw.githubusercontent.com/Alexays/Waybar/master/resources/custom_modules/mediaplayer.py -O /etc/xdg/waybar/mediaplayer.py
 sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
-sudo sed -i 's/elif artist is not None and title is not None:/elif artist is not None and title is not None and artist is not "":/g' /etc/xdg/waybar/mediaplayer.py
+sudo sed -i 's/elif artist is not None and title is not None:/elif artist is not None and title is not None and artist != "":/g' /etc/xdg/waybar/mediaplayer.py
 
 # Spotify autostart minimized script
 cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
@@ -110,6 +111,9 @@ xdotool search --onlyvisible --name spotify windowquit
 EOF
 
 sudo cp -f "$reposdir/arch-install/scripts/virt-desktop-checker.sh" "/etc/xdg/waybar/virt-desktop-checker.sh"
+
+systemctl --user enable ydotool.service
+systemctl --user start ydotool.service
 
 sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
 sudo chmod +x "/etc/xdg/waybar/virt-desktop-checker.sh"
@@ -156,6 +160,7 @@ State=AAAA/wAAAAD9AAAAAwAAAAAAAAC0AAAClfwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAG
 EOF
 
 # Set sddm settings
+mkdir -p /etc/sddm.conf.d
 sudo bash -c "cat << EOF > /etc/sddm.conf.d/kde_settings.conf
 [Autologin]
 Relogin=false
@@ -274,7 +279,7 @@ EOF"
   echo "----------------CONFIGURE HOWDY------------------"
   echo "-------------------------------------------------"
 
-  sudo paru -Sy --needed howdy-beta-git --noconfirm
+  paru -Sy --needed howdy-git --noconfirm
   sudo sed -i 's/device_path =.*/c\device_path = \/dev\/v4l\/by-id\/usb-Chicony_Electronics_Co._Ltd._Integrated_Camera_0001-video-index0/g' /lib/security/howdy/config.ini
   sudo sed -i 's/capture_failed =.*/c\capture_failed = false/g' /lib/security/howdy/config.ini
   sudo sed -i 's/capture_successful =.*/c\capture_successful = false/g' /lib/security/howdy/config.ini
@@ -283,8 +288,6 @@ EOF"
   sudo tar -C / --no-same-owner -h -xzf /tmp/linux-enable-ir-emitter.tar.gz
   rm /tmp/linux-enable-ir-emitter.tar.gz
 fi
-
-# Install nvidia drivers
 
 is_nvidia=$(lspci | grep -i nvidia | wc -l)
 
@@ -299,9 +302,9 @@ then
   sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
   sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
 
-  sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*_linux-zen.conf
+  sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*linux-zen.conf
 
-  sudo bash -c "cat EOF > /etc/pacman.d/hooks/nvidia.hook
+  sudo bash -c "cat << EOF > /etc/pacman.d/hooks/nvidia.hook
 [Trigger]
 Operation=Install
 Operation=Upgrade
@@ -325,22 +328,6 @@ echo "-----------------UPDATE INITRAMFS----------------"
 echo "-------------------------------------------------"
 
 sudo mkinitcpio -P
-
-# Install linux-lts kernel as fallback
-
-echo "-------------------------------------------------"
-echo "-----------INSTALL LINUX-LTS KERNEL--------------"
-echo "-------------------------------------------------"
-
-sudo pacman -Sy --needed linux-lts linux-lts-headers --noconfirm
-
-partition=$(lsblk -o NAME,SIZE | grep -i nvme | awk '{print $1}')
-
-sudo cp /boot/loader/entries/*_linux-zen.conf /boot/loader/entries/linux-lts.conf
-sudo cp /boot/loader/entries/*_linux-zen-fallback.conf /boot/loader/entries/linux-lts-fallback.conf
-
-sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts.conf
-sudo sed -i 's/zen/lts/g' /boot/loader/entries/linux-lts-fallback.conf
 
 # Setup smb client shares
 
@@ -366,25 +353,25 @@ do
 
   mkdir -p "$smb_destination"
 
-  sudo bash -c "cat << EOF > /etc/cifspasswd-$i
+  sudo bash -c "cat << EOF > /etc/cifspasswd$i
 username=$smb_username
 password=$smb_password
 EOF"
 
-  sudo chmod 600 /etc/cifspasswd-$i
+  sudo chmod 600 /etc/cifspasswd$i
 
   sudo bash -c "cat << EOF > /etc/systemd/system/$smb_name.mount
 [Unit]
 Description=$smb_description
 RequiresMountsFor=/mnt
-Requires=network-online.target wg-quick@wg0
-After=network-online.target wg-quick@wg0
+Requires=network-online.target wg-quick@wg0.service
+After=network-online.target wg-quick@wg0.service
 
 [Mount]
 What=$smb_source
 Where=$smb_destination
 Type=cifs
-Options=uid=tychob,gid=tychob,_netdev,nofail,credentials=/etc/cifspasswd-$i
+Options=uid=me,gid=me,_netdev,nofail,credentials=/etc/cifspasswd$i
 TimeoutSec=10
 LazyUnmount=yes
 
@@ -568,4 +555,4 @@ echo "-------------------------------------------------"
 
 # fix kopia tray icon
 
-sudo cp -f "$current_dir/icons/kopia.png" "/opt/KopiaUI/resources/icons/kopia-tray.png"
+sudo cp -f "$current_dir/icons/kopia-tray.png" "/opt/KopiaUI/resources/icons/kopia-tray.png"

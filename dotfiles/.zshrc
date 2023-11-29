@@ -15,7 +15,7 @@ compinit
 # End of lines added by compinstall
 
 # Oh My Zsh configuration
-export ZSH="$HOME/Repositories/oh-my-zsh"
+export ZSH="$HOME/Projects/oh-my-zsh"
 ZSH_THEME="candy"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
@@ -35,3 +35,4 @@ alias pacman-autoremove='sudo pacman -Rns $(pacman -Qtdq)'
 # Let gtk apps use gtk3-nocsd
 export GTK_CSD=0
 export LD_PRELOAD=/usr/lib/libgtk3-nocsd.so.0
+
