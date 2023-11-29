@@ -556,9 +556,10 @@ echo "-------------------------------------------------"
 
 git_urls=$( jq -r ".git_urls.[]" "$config_file" )
 
-i=0;
-while IFS= read -r git_url
+while read -r git_url
 do
+  echo "$git_url"
+  
   git_folder=$(basename "$git_url" .git)
   
   if [ ! -d "$reposdir/$git_folder" ]
@@ -569,9 +570,7 @@ do
     git pull
     git rebase
   fi
-
-  ((i=i+1))
-done
+done <<< "$git_urls"
 
 # Customize application icons
 
