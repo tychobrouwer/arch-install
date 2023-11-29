@@ -89,7 +89,6 @@ echo "----------------CONFIGURE WAYBAR-----------------"
 echo "-------------------------------------------------"
 
 # sudo sensors-detect
-mkdir -p
 cat << EOF > "$HOME/.config/autostart/waybar.desktop"
 [Desktop Entry]
 Type=Application
@@ -209,6 +208,8 @@ fi
 
 sudo systemctl enable sshd.service
 sudo systemctl start sshd.service
+
+ssh-add "$HOME/.ssh/id_ed25519"
 
 # Configure Wireguard
 echo "-------------------------------------------------"
@@ -546,6 +547,29 @@ MimeType=x-scheme-handler/spotify;
 Categories=Audio;Music;Player;AudioVideo;
 StartupWMClass=spotify
 EOF"
+
+# Add git folders 
+
+echo "-------------------------------------------------"
+echo "-----------------ADD GIT FOLDERS-----------------"
+echo "-------------------------------------------------"
+
+git_urls=$( jq -r ".git_urls.[]" "$config_file" )
+git_n=$(git_urls | wc -l)
+
+i=0;
+while [ $i -lt $git_n ]
+do
+  echo "$i"
+  echo "$git_urls"
+
+  # git_url=$(_jq '.url')
+  # git_folder=$(_jq '.folder')
+
+  # git clone "$git_url" "$reposdir/$git_folder"
+
+  ((i=i+1))
+done
 
 # Customize application icons
 

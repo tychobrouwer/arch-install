@@ -5,6 +5,15 @@
   "is_thinkpad": false,
   "install_wine": true,
   "install_proton_ge": true,
+  "git_urls": [
+    "git@github.com:TychoBrouwer/ansible.git",
+    "git@github.com:TychoBrouwer/esp32-remote-car.git",
+    "git@github.com:TychoBrouwer/mail-app-flutter.git",
+    "git@github.com:TychoBrouwer/personal-website-elm.git",
+    "git@github.com:TychoBrouwer/my-wiki.git",
+    "git@github.com:TychoBrouwer/dashy-cutomized.git",
+    "git@github.com:TychoBrouwer/TychoBrouwer.git"
+  ],
   "wireguard": [
     {
       "port": 51820,
