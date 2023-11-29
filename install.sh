@@ -69,7 +69,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-edge jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -106,8 +106,10 @@ cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify --url='' &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
-xdotool search --onlyvisible --name spotify windowquit
-EOF
+xdotool search --onlyvisible --name spotify
+xdotool search --onlyvisible --name spotify windowminimize
+sleep 1
+EOF 
 
 sudo cp -f "$reposdir/arch-install/scripts/virt-desktop-checker.sh" "/etc/xdg/waybar/virt-desktop-checker.sh"
 
@@ -521,10 +523,15 @@ application_desktop_files=(
   "/usr/share/applications/org.kde.plasma.emojier.desktop"
   "/usr/share/applications/org.kde.kinfocenter.desktop"
   "/usr/share/applications/org.kde.kuserfeedback-console.desktop"
+  "/usr/share/applications/org.kde.kmenuedit.desktop"
   "/usr/share/applications/thorium-shell.desktop"
   "/usr/share/applications/cmake-gui.desktop"
   "/usr/share/applications/jconsole-java-openjdk.desktop"
   "/usr/share/applications/jshell-java-openjdk.desktop"
+  "/usr/share/applications/nm-connection-editor.desktop"
+  "/usr/share/applications/uxterm.desktop"
+  "/usr/share/applications/nvtop.desktop"
+  "/usr/share/applications/htop.desktop"
 )
 
 for desktop_file in "${application_desktop_files[@]}"
