@@ -109,6 +109,7 @@ while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
 xdotool search --onlyvisible --name spotify
 xdotool search --onlyvisible --name spotify windowminimize
 sleep 1
+xdotool search --onlyvisible --name spotify windowminimize
 EOF 
 
 sudo cp -f "$reposdir/arch-install/scripts/virt-desktop-checker.sh" "/etc/xdg/waybar/virt-desktop-checker.sh"
@@ -382,8 +383,20 @@ LazyUnmount=yes
 WantedBy=multi-user.target
 EOF"
 
-  sudo systemctl enable $smb_name.mount
-  sudo systemctl start $smb_name.mount
+  sudo bash -c "cat << EOF > /etc/systemd/system/$smb_name.automount
+[Unit]
+Description=$smb_description
+
+[Automount]
+Where=$smb_destination
+TimeoutIdleSec=60
+
+[Install]
+WantedBy=multi-user.target
+EOF"
+
+  sudo systemctl enable $smb_name.automount
+  sudo systemctl start $smb_name.automount
 
   ((i=i+1))
 done
