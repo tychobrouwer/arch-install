@@ -555,18 +555,20 @@ echo "-----------------ADD GIT FOLDERS-----------------"
 echo "-------------------------------------------------"
 
 git_urls=$( jq -r ".git_urls.[]" "$config_file" )
-git_n=$(git_urls | wc -l)
 
 i=0;
-while [ $i -lt $git_n ]
+while IFS= read -r git_url
 do
-  echo "$i"
-  echo "$git_urls"
-
-  # git_url=$(_jq '.url')
-  # git_folder=$(_jq '.folder')
-
-  # git clone "$git_url" "$reposdir/$git_folder"
+  git_folder=$(basename "$git_url" .git)
+  
+  if [ ! -d "$reposdir/$git_folder" ]
+  then
+    git clone "$git_url" "$reposdir/$git_folder"
+  else
+    cd "$reposdir/$git_folder"
+    git pull
+    git rebase
+  fi
 
   ((i=i+1))
 done
