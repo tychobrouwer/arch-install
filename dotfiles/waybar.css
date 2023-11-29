@@ -66,8 +66,7 @@ window#waybar {
 }
 
 #battery.warning:not(.charging) {
-  background-color: #f7768e;
-  color: #1d1d1d;
+  color: #f7768e;
   border-radius: 5px 5px 5px 5px;
 }
 
