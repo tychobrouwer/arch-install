@@ -58,22 +58,22 @@
   },
   "custom/power": {
     "exec": "/etc/xdg/waybar/power-usage.sh",
-    "interval": 5,
+    "interval": 1,
     "return-type": "json"
   },
   "memory": {
     "format": " {used:0.1f}GiB",
     "tooltip": false,
-    "interval": 5
+    "interval": 1
   },
   "cpu": {
-    "format": " {usage}%",
+    "format": " {usage:2}%",
     "tooltip": false,
     "interval": 5
   },
   "disk": {
     "format": " {free}",
-    "interval": 5,
+    "interval": 1,
     "tooltip": false,
     "path": "/"
   },
@@ -94,7 +94,7 @@
     "format-plugged": "{capacity}% ",
     "format-alt": "{time} {icon}",
     "tooltip": false,
-    "interval": 5,
+    "interval": 1,
     "format-icons": [
       "",
       "",

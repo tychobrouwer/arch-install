@@ -1,5 +1,9 @@
 #!/bin/bash
 
-usage=$(cat /sys/class/power_supply/BAT0/power_now)
+usage=$(($(cat /sys/class/power_supply/BAT0/power_now)/1000000))
+status=$(cat /sys/class/power_supply/BAT0/status)
 
-printf '{"text": "%.1f W", "class": "%s"}\n' $(($usage/1000000)) "$(if [[ usage>=0 ]]; then echo 'charging'; else echo 'depleting'; fi)"
+usage=$(if [[ $status == "Discharging" ]]; then echo -$usage; else echo $usage; fi)
+status=$(if [[ $status = "Discharging" ]]; then echo "discharging"; else echo "charging"; fi)
+
+printf '{"text": "%0.1fW", "class": "%s"}\n' $usage $status
