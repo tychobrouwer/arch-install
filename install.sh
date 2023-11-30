@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -69,7 +69,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin whatsie gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -512,19 +512,6 @@ Version=1.0
 Name=kopia-ui
 Comment=koipia-uistartup script
 Exec=/opt/KopiaUI/kopia-ui
-StartupNotify=false
-Terminal=false
-EOF
-
-# Create Whatsie auto start script
-cat << EOF > "$HOME/.config/autostart/whatsie.desktop"
-[Desktop Entry]
-Type=Application
-Version=1.0
-Name=whatsie
-Comment=whatsie startup script
-Exec=/usr/bin/whatsie %u
-StartupWMClass=whatsie
 StartupNotify=false
 Terminal=false
 EOF
