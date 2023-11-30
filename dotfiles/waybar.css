@@ -21,11 +21,20 @@ window#waybar {
 #network,
 #pulseaudio,
 #custom-spotify,
+#custom-discharging,
 #custom-clock {
   margin: 3px 5px;
   padding: 3px 0;
   font-weight: bold;
   border-radius: 1px;
+}
+
+#custom-power.charging {
+  color: #9ece6a;
+}
+
+#custom-power:not(.charging) {
+  color: #f7768e;
 }
 
 #battery {
@@ -67,7 +76,6 @@ window#waybar {
 
 #battery.warning:not(.charging) {
   color: #f7768e;
-  border-radius: 5px 5px 5px 5px;
 }
 
 #pulseaudio.muted {

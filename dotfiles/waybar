@@ -20,6 +20,7 @@
     "cpu",
     "memory",
     "disk",
+    "custom/power",
     "battery",
     "battery#bat2"
   ],
@@ -35,24 +36,29 @@
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
-    "restart-interval": 1
+    "restart-interval": 5
   },
   "custom/virt-desktop-1": {
     "exec": "/etc/xdg/waybar/virt-desktop-checker.sh 1",
     "on-click": "ydotool key 29:1 59:1 59:0 29:0",
-    "restart-interval": 1,
+    "restart-interval": 5,
     "return-type": "json"
   },
   "custom/virt-desktop-2": {
     "exec": "/etc/xdg/waybar/virt-desktop-checker.sh 2",
     "on-click": "ydotool key 29:1 60:1 60:0 29:0",
-    "restart-interval": 1,
+    "restart-interval": 5,
     "return-type": "json"
   },
   "custom/virt-desktop-3": {
     "exec": "/etc/xdg/waybar/virt-desktop-checker.sh 3",
     "on-click": "ydotool key 29:1 61:1 61:0 29:0",
-    "restart-interval": 1,
+    "restart-interval": 5,
+    "return-type": "json"
+  },
+  "custom/power": {
+    "exec": "/etc/xdg/waybar/power-usage.sh",
+    "interval": 5,
     "return-type": "json"
   },
   "memory": {
@@ -87,6 +93,8 @@
     "format-charging": "{capacity}% ",
     "format-plugged": "{capacity}% ",
     "format-alt": "{time} {icon}",
+    "tooltip": false,
+    "interval": 5,
     "format-icons": [
       "",
       "",

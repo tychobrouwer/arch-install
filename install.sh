@@ -112,14 +112,17 @@ xdotool search --onlyvisible --name spotify
 sleep 1
 xdotool search --onlyvisible --name spotify windowminimize
 EOF
+sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
 
 sudo cp -f "$reposdir/arch-install/scripts/virt-desktop-checker.sh" "/etc/xdg/waybar/virt-desktop-checker.sh"
+
+sudo cp -f "$reposdir/arch-install/scripts/power-usage.sh" "/etc/xdg/waybar/power-usage.sh"
 
 systemctl --user enable ydotool.service
 systemctl --user start ydotool.service
 
-sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
 sudo chmod +x "/etc/xdg/waybar/virt-desktop-checker.sh"
+sudo chmod +x "/etc/xdg/waybar/power-usage.sh"
 
 cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
