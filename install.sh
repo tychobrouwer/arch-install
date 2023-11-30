@@ -106,9 +106,7 @@ cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify-launcher -- --uri="spotify:playlist:37i9dQZF1E35Ag8qP76jT0" &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
-xdotool search --onlyvisible --name spotify
 xdotool search --onlyvisible --name spotify windowminimize
-xdotool search --onlyvisible --name spotify
 sleep 1
 xdotool search --onlyvisible --name spotify windowminimize
 EOF
@@ -127,14 +125,12 @@ sudo chmod +x "/etc/xdg/waybar/power-usage.sh"
 cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
+Comment=Lightweight Spotify client using Qt
 Exec=$HOME/.scripts/waybar-spotify.sh
 GenericName=Music Player
-Icon=spotify-client
-MimeType=x-scheme-handler/spotify;
-Name=Spotify
-StartupWMClass=spotify
+Icon=spotify-qt
+Name=spotify-qt
 Terminal=false
-TryExec=spotify
 Type=Application
 EOF
 
