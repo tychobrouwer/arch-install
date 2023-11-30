@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -261,6 +261,9 @@ sudo systemctl start wg-quick@wg0.service
 is_thinkpad=$( jq -r ".is_thinkpad" "$config_file" )
 if [ $is_thinkpad == true ]
 then
+  sudo systemctl enable bluetooth.service
+  sudo systemctl start bluetooth.service
+
   echo "-------------------------------------------------"
   echo "-------------------CONFIGURE TLP-----------------"
   echo "-------------------------------------------------"
