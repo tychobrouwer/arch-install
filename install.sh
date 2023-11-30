@@ -282,7 +282,7 @@ EOF"
   echo "----------------CONFIGURE HOWDY------------------"
   echo "-------------------------------------------------"
 
-  paru -Sy --needed howdy-git --noconfirm
+  paru -Sy --needed howdy-beta-git --noconfirm
   sudo sed -i 's/device_path =.*/c\device_path = \/dev\/v4l\/by-id\/usb-Chicony_Electronics_Co._Ltd._Integrated_Camera_0001-video-index0/g' /lib/security/howdy/config.ini
   sudo sed -i 's/capture_failed =.*/c\capture_failed = false/g' /lib/security/howdy/config.ini
   sudo sed -i 's/capture_successful =.*/c\capture_successful = false/g' /lib/security/howdy/config.ini
