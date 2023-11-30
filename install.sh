@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -101,12 +101,14 @@ sudo chmod +x /etc/xdg/waybar/mediaplayer.py
 
 sudo sed -i 's/elif artist is not None and title is not None:/elif artist is not None and title is not None and artist != "":/g' /etc/xdg/waybar/mediaplayer.py
 
-# Spotify autostart minimized script
+# Spotify autostart minimized script (weird way to do it, but it works)
 cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify-launcher -- --uri="spotify:playlist:37i9dQZF1E35Ag8qP76jT0" &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
+xdotool search --onlyvisible --name spotify
 xdotool search --onlyvisible --name spotify windowminimize
+xdotool search --onlyvisible --name spotify
 sleep 1
 xdotool search --onlyvisible --name spotify windowminimize
 EOF
