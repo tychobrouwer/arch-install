@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager powertop --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager virt-viewer qemu-desktop bridge-utils libguestfs powertop --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -486,6 +486,18 @@ then
     sudo chown "$USER":"$USER" "$HOME/.local/share/applications/matlab.desktop"
   fi
 fi
+
+# Configure VirtManager
+
+echo "-------------------------------------------------"
+echo "----------------CONFIGURE VIRTMANAGER------------"
+echo "-------------------------------------------------"
+
+sudo systemctl enable libvirtd.service
+sudo systemctl start libvirtd.service
+
+sudo usermod -aG "$USER" libvirt
+
 
 # Apply customizations
 echo "-------------------------------------------------"
