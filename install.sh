@@ -55,7 +55,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager powertop --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -122,7 +122,7 @@ systemctl --user start ydotool.service
 sudo chmod +x "/etc/xdg/waybar/virt-desktop-checker.sh"
 sudo chmod +x "/etc/xdg/waybar/power-usage.sh"
 
-cat << EOF > "$HOME/.config/autostart/spotify.desktop"
+cat << EOF > "$HOME/.config/autostart/spotify-qt.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
 Comment=Lightweight Spotify client using Qt
@@ -272,9 +272,9 @@ then
 
   sudo pacman -Sy --needed tlp --noconfirm
 
-  echo "Setting theshold for battery charge (start/stop): 75/80" 
+  echo "Setting theshold for battery charge (start/stop): 70/80" 
   sudo bash -c "cat << EOF > /etc/tlp.conf
-START_CHARGE_THRESH_BAT0=75
+START_CHARGE_THRESH_BAT0=70
 STOP_CHARGE_THRESH_BAT0=80
 EOF"
 
@@ -288,7 +288,7 @@ EOF"
   echo "-------------------------------------------------"
 
   paru -Sy --needed howdy-beta-git --noconfirm
-  sudo cp -f "$dotfilesdir"/howdy.ini" "/etc/howdy/config.ini"
+  sudo cp -f "$dotfilesdir/howdy.ini" "/etc/howdy/config.ini"
 
   wget https://github.com/EmixamPP/linux-enable-ir-emitter/releases/download/5.2.4/linux-enable-ir-emitter-5.2.4.systemd.x86-64.tar.gz -O /tmp/linux-enable-ir-emitter.tar.gz
   sudo tar -C / --no-same-owner -h -xzf /tmp/linux-enable-ir-emitter.tar.gz
@@ -313,7 +313,9 @@ then
   echo "-----------------INSTALL NVIDIA------------------"
   echo "-------------------------------------------------"
 
-  sudo pacman -Sy --needed linux-zen-headers nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings nvtop --noconfirm
+  sudo pacman -Sy --needed linux-zen-headers nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings nvtop nvidia-prime --noconfirm
+
+  paru -Sy --needed nvidia-prime-rtd3pm --noconfirm
 
   sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
   sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
@@ -463,6 +465,25 @@ then
   rm /tmp/GE-Proton.tar.gz
 fi
 
+# Install matlab dep
+
+install_matlab_dep=$( jq -r ".install_matlab_dep" "$config_file" )
+
+if [ $install_matlab_dep == true ]
+then
+  echo "-------------------------------------------------"
+  echo "----------------INSTALL MATLAB DEP---------------"
+  echo "-------------------------------------------------"
+
+  sudo pacman -Sy --needed jdk11-openjdk --noconfirm
+
+  paru -Sy --needed matlab-support --noconfirm
+
+  sudo cp "/usr/share/applications/matlab.desktop" "$HOME/.local/share/applications/matlab.desktop"
+  sudo sed -i 's/Exec=.*/Exec=matlab -nosoftwareopengl -desktop/g' "$HOME/.local/share/applications/matlab.desktop"
+  sudo chown "$USER":"$USER" "$HOME/.local/share/applications/matlab.desktop"
+fi
+
 # Apply customizations
 echo "-------------------------------------------------"
 echo "---------------APPLY CUSTOMIZATIONS--------------"
@@ -539,11 +560,16 @@ application_desktop_files=(
   "/usr/share/applications/thorium-shell.desktop"
   "/usr/share/applications/cmake-gui.desktop"
   "/usr/share/applications/jconsole-java-openjdk.desktop"
+  "/usr/share/applications/jconsole-java11-openjdk.desktop"
   "/usr/share/applications/jshell-java-openjdk.desktop"
+  "/usr/share/applications/jshell-java11-openjdk.desktop"
   "/usr/share/applications/nm-connection-editor.desktop"
   "/usr/share/applications/uxterm.desktop"
   "/usr/share/applications/nvtop.desktop"
   "/usr/share/applications/htop.desktop"
+  "/home/me/.local/share/applications/mw-matlab.desktop"
+  "/home/me/.local/share/applications/mw-matlabconnector.desktop"
+  "/home/me/.local/share/applications/mw-simulink.desktop"
 )
 
 for desktop_file in "${application_desktop_files[@]}"
@@ -552,20 +578,6 @@ do
   
   sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
 done
-
-sudo bash -c "cat << EOF > $HOME/.local/share/applications/spotify.desktop
-[Desktop Entry]
-Type=Application
-Name=Spotify
-GenericName=Music Player
-Icon=spotify-client
-TryExec=spotify
-Exec=spotify
-Terminal=false
-MimeType=x-scheme-handler/spotify;
-Categories=Audio;Music;Player;AudioVideo;
-StartupWMClass=spotify
-EOF"
 
 # Add git folders 
 

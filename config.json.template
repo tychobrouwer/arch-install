@@ -5,6 +5,7 @@
   "is_thinkpad": false,
   "install_wine": true,
   "install_proton_ge": true,
+  "install_matlab_dep": true,
   "git_urls": [
     "git@github.com:TychoBrouwer/ansible.git",
     "git@github.com:TychoBrouwer/esp32-remote-car.git",
