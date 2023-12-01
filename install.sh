@@ -479,9 +479,12 @@ then
 
   paru -Sy --needed matlab-support --noconfirm
 
-  sudo cp "/usr/share/applications/matlab.desktop" "$HOME/.local/share/applications/matlab.desktop"
-  sudo sed -i 's/Exec=.*/Exec=matlab -nosoftwareopengl -desktop/g' "$HOME/.local/share/applications/matlab.desktop"
-  sudo chown "$USER":"$USER" "$HOME/.local/share/applications/matlab.desktop"
+  if [ ! -f "/usr/share/applications/matlab.desktop" ]
+  then
+    sudo cp "/usr/share/applications/matlab.desktop" "$HOME/.local/share/applications/matlab.desktop"
+    sudo sed -i 's/Exec=.*/Exec=matlab -nosoftwareopengl -desktop/g' "$HOME/.local/share/applications/matlab.desktop"
+    sudo chown "$USER":"$USER" "$HOME/.local/share/applications/matlab.desktop"
+  fi
 fi
 
 # Apply customizations
