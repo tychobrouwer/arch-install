@@ -47,7 +47,7 @@ window#waybar {
   margin: 3px 0px 3px 0px;
   padding: 3px;
   font-weight: bold;
-  background-color: #454b50;
+  background-color: #31363b;
   border-radius: 1px;
 }
 
@@ -79,5 +79,5 @@ window#waybar {
 }
 
 #pulseaudio.muted {
-  color: #454b50;
+  color: #31363b;
 }
