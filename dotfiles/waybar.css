@@ -10,6 +10,7 @@
 
 window#waybar {
   background-color: #1b1e20;
+  border-bottom: #191c1e;
   color: #dfdfdf;
 }
 
