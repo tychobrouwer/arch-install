@@ -9,9 +9,8 @@
 }
 
 window#waybar {
-  background-color: #1d1d1d;
+  background-color: #3c3c3c;
   color: #dfdfdf;
-  border-bottom: #454b50 1px solid;
 }
 
 #cpu,
@@ -63,7 +62,7 @@ window#waybar {
 #custom-virt-desktop-2.active,
 #custom-virt-desktop-3.active {
   background-color: #dfdfdf;
-  color: #1d1d1d;
+  color: #1b1e20;
 }
 
 #battery {
