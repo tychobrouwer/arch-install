@@ -10,8 +10,8 @@
 
 window#waybar {
   /* background-color: #1b1e20; */
-  background: linear-gradient(to bottom, rgba(27,30,32,1) 98%, rgba(0,0,0,1) 100%);
-  /* border-bottom: #191c1e; */
+  background: linear-gradient(to bottom, rgba(27,30,32,1) 90%, rgba(27,27,27,1) 100%);
+  border-bottom: #191c1e;
   color: #dfdfdf;
 }
 
