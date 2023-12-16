@@ -32,7 +32,6 @@ alias la='ls -lah'
 alias pacman='sudo pacman'
 alias pacman-autoremove='sudo pacman -Rns $(pacman -Qtdq)'
 
-# Let gtk apps use gtk3-nocsd
-export GTK_CSD=0
-export LD_PRELOAD=/usr/lib/libgtk3-nocsd.so.0
+export LIBVIRT_DEFAULT_URI='qemu:///system'
 
+export EDITOR=nano

@@ -50,12 +50,14 @@ sudo sed -i 's/fsck//' /etc/mkinitcpio.conf
 
 sudo systemctl mask systemd-fsck-root.service
 
+sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt/' /boot/loader/entries/*linux-zen.conf
+
 echo "-------------------------------------------------"
 echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager virt-viewer qemu-desktop bridge-utils libguestfs powertop --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh kvantum openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager virt-viewer qemu-desktop dnsmasq swtpm powertop --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -69,7 +71,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -317,27 +319,27 @@ then
 
   paru -Sy --needed nvidia-prime-rtd3pm --noconfirm
 
-  sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
+  sudo sed -i 's/MODULES=(btrfs/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm btrfs/g' /etc/mkinitcpio.conf
   sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
 
-  sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*linux-zen.conf
+  sudo sed -i '/options.*iommu=pt$/s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*linux-zen.conf
 
-  sudo bash -c "cat << EOF > /etc/pacman.d/hooks/nvidia.hook
-[Trigger]
-Operation=Install
-Operation=Upgrade
-Operation=Remove
-Type=Package
-Target=nvidia-dkms
-Target=linux-zen
+#   sudo bash -c "cat << EOF > /etc/pacman.d/hooks/nvidia.hook
+# [Trigger]
+# Operation=Install
+# Operation=Upgrade
+# Operation=Remove
+# Type=Package
+# Target=nvidia-dkms
+# Target=linux-zen
 
-[Action]
-Description=Update NVIDIA module in initcpio
-Depends=mkinitcpio
-When=PostTransaction
-NeedsTargets
-Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
-EOF"
+# [Action]
+# Description=Update NVIDIA module in initcpio
+# Depends=mkinitcpio
+# When=PostTransaction
+# NeedsTargets
+# Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+# EOF"
 fi
 
 # Update initramfs
@@ -495,9 +497,24 @@ echo "-------------------------------------------------"
 
 sudo systemctl enable libvirtd.service
 sudo systemctl start libvirtd.service
+sudo systemctl enable virtlogd.socket
+sudo systemctl start virtlogd.socket
+
+sudo virsh net-autostart default
+sudo virsh net-start default
 
 sudo usermod -aG "$USER" libvirt
 
+sudo mkdir -p /var/lib/libvirt/isos
+
+sudo setfacl -R -b /var/lib/libvirt/images
+sudo setfacl -R -m u:$USER:rwX /var/lib/libvirt/images
+sudo setfacl -m d:u:$USER:rwx /var/lib/libvirt/images
+sudo setfacl -R -b /var/lib/libvirt/isos
+sudo setfacl -R -m u:$USER:rwX /var/lib/libvirt/isos
+sudo setfacl -m d:u:$USER:rwx /var/lib/libvirt/isos
+
+wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/libvirt/isos/virtio-win.iso
 
 # Apply customizations
 echo "-------------------------------------------------"
