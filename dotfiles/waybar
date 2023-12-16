@@ -35,7 +35,7 @@
     "max-length": 40,
     "restart-interval": 5,
     "on-click": "playerctl -p spotify play-pause",
-    "smooth-scrolling-threshold": 10,
+    "smooth-scrolling-threshold": 3,
     "on-scroll-up": "playerctl -p spotify next",
     "on-scroll-down": "playerctl -p spotify previous",
     "exec": "/usr/bin/python3 /etc/xdg/waybar/mediaplayer.py --player spotify"
