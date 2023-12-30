@@ -24,6 +24,9 @@ echo "-------------------------------------------------"
 # Set parallel downloads pacman
 sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 20' /etc/pacman.conf
 
+# Set mkpkg parallel jobs
+sudo sed -i '/MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc)"' /etc/makepkg.conf
+
 # Create pacman hook for systemd-boot
 sudo mkdir -p /etc/pacman.d/hooks
 sudo bash -c "cat <<EOF > /etc/pacman.d/hooks/95-systemd-boot.hook
@@ -50,7 +53,11 @@ sudo sed -i 's/fsck//' /etc/mkinitcpio.conf
 
 sudo systemctl mask systemd-fsck-root.service
 
-sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt/' /boot/loader/entries/*linux-zen.conf
+sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt tsc=reliable clocksource=tsc/' /boot/loader/entries/*linux-zen.conf
+
+# Set systemd timeouts
+sudo sed -i '/DefaultTimeoutStopSec/c\DefaultTimeoutStopSec=10s' /etc/systemd/system.conf
+sudo sed -i '/DefaultDeviceTimeoutSec/c\DefaultDeviceTimeoutSec=10s' /etc/systemd/system.conf
 
 echo "-------------------------------------------------"
 echo "-----------------INSTALL PACKAGES----------------"
@@ -71,7 +78,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin gtk3-nocsd-git --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -522,7 +529,10 @@ echo "---------------APPLY CUSTOMIZATIONS--------------"
 echo "-------------------------------------------------"
 
 # Configure gtk apps to use gtk3-nocsd
-gtk_apps=(net.lutris.Lutris.desktop)
+gtk_apps=(
+  net.lutris.Lutris.desktop
+)
+
 for app in "${gtk_apps[@]}"
 do
   [ ! -f "/usr/share/applications/$app" ] && continue
