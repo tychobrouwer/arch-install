@@ -71,7 +71,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
+paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -127,11 +127,11 @@ sudo chmod +x "/etc/xdg/waybar/power-usage.sh"
 cat << EOF > "$HOME/.config/autostart/spotify-qt.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Comment=Lightweight Spotify client using Qt
+Comment=Spotify client
 Exec=$HOME/.scripts/waybar-spotify.sh
 GenericName=Music Player
-Icon=spotify-qt
-Name=spotify-qt
+Icon=spotify
+Name=spotify
 Terminal=false
 Type=Application
 EOF
@@ -176,7 +176,7 @@ HaltCommand=/usr/bin/systemctl poweroff
 RebootCommand=/usr/bin/systemctl reboot
 
 [Theme]
-Current=my-theme
+Current=breeze-dark-custom
 CursorTheme=breeze_cursors
 Font=Noto Sans,10,-1,5,50,0,0,0,0,0
 
@@ -599,6 +599,10 @@ application_desktop_files=(
   "/usr/share/applications/uxterm.desktop"
   "/usr/share/applications/nvtop.desktop"
   "/usr/share/applications/htop.desktop"
+  "/usr/share/applications/qvidcap.desktop"
+  "/usr/share/applications/qv4l2.desktop"
+  "/usr/share/applications/xterm.desktop"
+  "/usr/share/applications/org.kde.plasma-welcome.desktop"
   "/home/me/.local/share/applications/mw-matlab.desktop"
   "/home/me/.local/share/applications/mw-matlabconnector.desktop"
   "/home/me/.local/share/applications/mw-simulink.desktop"
