@@ -64,7 +64,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager virt-viewer qemu-desktop dnsmasq swtpm powertop --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager virt-viewer qemu-desktop dnsmasq swtpm powertop torbrowser-launcher --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -78,7 +78,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin gtk3-nocsd-git --noconfirm --skipreview
+paru -Suy --needed visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin gtk3-nocsd-git --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -531,6 +531,7 @@ echo "-------------------------------------------------"
 # Configure gtk apps to use gtk3-nocsd
 gtk_apps=(
   net.lutris.Lutris.desktop
+  torbrowser.desktop
 )
 
 for app in "${gtk_apps[@]}"
