@@ -31,6 +31,7 @@ bindkey '^[[F'    end-of-line
 alias la='ls -lah'
 alias pacman='sudo pacman'
 alias pacman-autoremove='sudo pacman -Rns $(pacman -Qtdq)'
+alias rm='trash-put'
 
 export LIBVIRT_DEFAULT_URI='qemu:///system'
 
