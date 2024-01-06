@@ -53,7 +53,7 @@ sudo sed -i 's/fsck//' /etc/mkinitcpio.conf
 
 sudo systemctl mask systemd-fsck-root.service
 
-sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt tsc=reliable clocksource=tsc/' /boot/loader/entries/*linux-zen.conf
+sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt mitigations=off tsc=reliable clocksource=tsc/' /boot/loader/entries/*linux-zen.conf
 
 # Set systemd timeouts
 sudo sed -i '/DefaultTimeoutStopSec/c\DefaultTimeoutStopSec=10s' /etc/systemd/system.conf
@@ -333,22 +333,22 @@ then
 
   sudo sed -i '/options.*iommu=pt$/s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*linux-zen.conf
 
-#   sudo bash -c "cat << EOF > /etc/pacman.d/hooks/nvidia.hook
-# [Trigger]
-# Operation=Install
-# Operation=Upgrade
-# Operation=Remove
-# Type=Package
-# Target=nvidia-dkms
-# Target=linux-zen
+  sudo bash -c "cat << EOF > /etc/pacman.d/hooks/nvidia.hook
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia-dkms
+Target=linux-zen
 
-# [Action]
-# Description=Update NVIDIA module in initcpio
-# Depends=mkinitcpio
-# When=PostTransaction
-# NeedsTargets
-# Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
-# EOF"
+[Action]
+Description=Update NVIDIA module in initcpio
+Depends=mkinitcpio
+When=PostTransaction
+NeedsTargets
+Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+EOF"
 fi
 
 # Update initramfs
@@ -392,7 +392,7 @@ EOF"
   sudo bash -c "cat << EOF > /etc/systemd/system/$smb_name.mount
 [Unit]
 Description=$smb_description
-RequiresMountsFor=/mnt
+RequiresMountsFor=${smb_source%/*}
 Requires=network-online.target wg-quick@wg0.service
 After=network-online.target wg-quick@wg0.service
 
@@ -401,8 +401,9 @@ What=$smb_source
 Where=$smb_destination
 Type=cifs
 Options=uid=me,gid=me,_netdev,nofail,credentials=/etc/cifspasswd$i
-TimeoutSec=10
+TimeoutSec=5
 LazyUnmount=yes
+ForceUnmount=yes
 
 [Install]
 WantedBy=multi-user.target
