@@ -696,5 +696,19 @@ then
   flutter config --no-analytics
 
   flutter precache
+fi
 
+# Install elm
+
+install_elm=$( jq -r ".install_elm" "$config_file" )
+
+if [ $install_elm == true ]
+then
+  wget https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz -O /tmp/elm.gz
+
+  gunzip /tmp/elm.gz
+  chmod +x /tmp/elm
+  sudo mv /tmp/elm /usr/local/bin/elm
+
+  rm /tmp/elm.gz
 fi
