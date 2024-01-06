@@ -663,3 +663,38 @@ echo "-------------------------------------------------"
 # fix kopia tray icon
 
 sudo cp -f "$current_dir/icons/kopia-tray.png" "/opt/KopiaUI/resources/icons/kopia-tray.png"
+
+# Setup developer tools
+
+echo "-------------------------------------------------"
+echo "-----------------SETUP DEVELOPER TOOLS-----------"
+echo "-------------------------------------------------"
+
+mkdir -p "$HOME/DevTools"
+
+# Install FlutterSDK
+
+install_flutter=$( jq -r ".install_flutter" "$config_file" )
+
+if [ $install_flutter == true ]
+then
+  sudo pacman -Sy --needed clang ninja --noconfirm
+
+  sudo ln -s /usr/bin/google-chrome-stable /usr/bin/google-chrome
+
+  wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.5-stable.tar.xz -O /tmp/flutter.tar.xz
+
+  tar -xf /tmp/flutter.tar.xz -C "$HOME/DevTools"
+  rm /tmp/flutter.tar.xz
+
+  flutter config --enable-linux-desktop
+  flutter config --enable-web
+  flutter config --enable-windows-desktop
+  flutter config --no-enable-macos-desktop
+  flutter config --no-enable-ios
+  flutter config --no-enable-android
+  flutter config --no-analytics
+
+  flutter precache
+
+fi

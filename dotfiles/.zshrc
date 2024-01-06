@@ -43,3 +43,10 @@ export EDITOR=nano
 # Show neofetch on shell startup
 echo ""
 neofetch --config $HOME/.config/neofetch/config-short.conf --ascii_distro arch_small
+
+# Add flutter to path
+
+if [ -d "$HOME/DevTools/flutter/bin" ] ; then
+  PATH="$PATH:$HOME/DevTools/flutter/bin"
+  CHROME_EXECUTABLE=/usr/bin/google-chrome
+fi
