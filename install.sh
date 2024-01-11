@@ -64,7 +64,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -628,6 +628,22 @@ do
   [ ! -f "$desktop_file" ] && continue
   
   sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
+done
+
+# Set wayland for some electron/chromium applicaions
+wayland_application_desktop_files=(
+  "/usr/share/applications/brave-browser.desktop"
+  "/usr/share/applications/Mailspring.desktop"
+  "$HOME/.config/autostart/Mailspring.desktop"
+)
+
+wayland_enable_string="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto  --enable-gpu-rasterization --ignore-gpu-blocklist --use-gl=desktop"
+
+for desktop_file in "${wayland_application_desktop_files[@]}"
+do
+  [ ! -f "$desktop_file" ] && continue  
+  
+  sudo bash -c "sed -i ''/$wayland_enable_string/b; s/Exec=\(\S*\)\( \)\{0,1\}\(.*\)/Exec=\1 $wayland_enable_string \3/'' $desktop_file"
 done
 
 # Add git folders 
