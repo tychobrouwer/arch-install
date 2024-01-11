@@ -20,6 +20,8 @@ ZSH_THEME="candy"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
+CASE_SENSITIVE="true"
+
 # User configuration
 bindkey '^[[1;5D' emacs-backward-word
 bindkey '^[[1;5C' emacs-forward-word

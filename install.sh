@@ -209,7 +209,7 @@ cp -sf "$dotfilesdir/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 mkdir -p "$HOME/.config/pip"
 cp -sf "$dotfilesdir/pip.conf" "$HOME/.config/pip/pip.conf"
 mkdir -p "$HOME/.config/neofetch"
-cp -sf "$dotfilesdir/neofetch-short.conf" "$HOME/.config/neofetch/config-short.conf"
+cp -f "$dotfilesdir/neofetch-short.conf" "$HOME/.config/neofetch/config-short.conf"
 
 # Enable and start sshd
 echo "-------------------------------------------------"
