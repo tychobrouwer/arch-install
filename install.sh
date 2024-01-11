@@ -208,8 +208,15 @@ cp -sf "$dotfilesdir/.directory-dolphin" "$HOME/.local/share/dolphin/view_proper
 cp -sf "$dotfilesdir/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 mkdir -p "$HOME/.config/pip"
 cp -sf "$dotfilesdir/pip.conf" "$HOME/.config/pip/pip.conf"
+cp -sf "$dotfilesdir/pip.conf" "root/.config/pip/pip.conf"
 mkdir -p "$HOME/.config/neofetch"
 cp -f "$dotfilesdir/neofetch-short.conf" "$HOME/.config/neofetch/config-short.conf"
+
+echo "-------------------------------------------------"
+echo "-------------INSTALL PIP PACKAGES----------------"
+echo "-------------------------------------------------"
+
+pip install --user ansible
 
 # Enable and start sshd
 echo "-------------------------------------------------"

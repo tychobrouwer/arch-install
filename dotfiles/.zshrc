@@ -21,6 +21,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 CASE_SENSITIVE="true"
+PATH="$PATH:$HOME/.local/bin"
 
 # User configuration
 bindkey '^[[1;5D' emacs-backward-word
