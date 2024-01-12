@@ -131,11 +131,11 @@ systemctl --user start ydotool.service
 sudo chmod +x "/etc/xdg/waybar/virt-desktop-checker.sh"
 sudo chmod +x "/etc/xdg/waybar/power-usage.sh"
 
-cat << EOF > "$HOME/.config/autostart/spotify-qt.desktop"
+cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
 Comment=Spotify client
-Exec=$HOME/.scripts/waybar-spotify.sh
+Exec=/home/me/.scripts/waybar-spotify.sh
 GenericName=Music Player
 Icon=spotify
 Name=spotify
