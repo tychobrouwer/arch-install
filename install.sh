@@ -115,9 +115,9 @@ cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify-launcher -- --uri="spotify:playlist:37i9dQZF1E35Ag8qP76jT0" &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
-xdotool search --onlyvisible --name spotify windowminimize
+xdotool search --onlyvisible --name spotify windowquit
 sleep 1
-xdotool search --onlyvisible --name spotify windowminimize
+xdotool search --onlyvisible --name spotify windowquit
 EOF
 sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
 
