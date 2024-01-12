@@ -64,7 +64,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
