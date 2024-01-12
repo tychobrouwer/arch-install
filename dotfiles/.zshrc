@@ -34,7 +34,6 @@ bindkey '^[[F'    end-of-line
 alias la='ls -lah'
 alias pacman='sudo pacman'
 alias pacman-autoremove='sudo pacman -Rns $(pacman -Qtdq)'
-alias rm='trash-put' # Put in trash when using rm command
 alias clear='clear && echo && neofetch --config $HOME/.config/neofetch/config-short.conf --ascii_distro arch_small'
 
 # Set default libvirt URI to the system one
