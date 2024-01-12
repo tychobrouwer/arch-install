@@ -64,7 +64,7 @@ echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk filelight --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -296,6 +296,18 @@ then
   sudo bash -c "cat << EOF > /etc/tlp.conf
 START_CHARGE_THRESH_BAT0=70
 STOP_CHARGE_THRESH_BAT0=80
+RESTORE_THRESHOLDS_ON_BAT=1
+
+PCIE_ASPM_ON_BAT=powersave
+
+CPU_SCALING_GOVERNOR_ON_BAT=powersave
+CPU_ENERGY_PERF_POLICY_ON_BAT=balance_power
+CPU_MIN_PERF_ON_BAT=0
+CPU_MAX_PERF_ON_BAT=30
+CPU_BOOST_ON_BAT=0
+CPU_HWP_DYN_BOOST_ON_BAT=0
+
+PLATFORM_PROFILE_ON_BAT=low-power
 EOF"
 
   sudo systemctl enable tlp.service
