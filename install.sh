@@ -115,6 +115,8 @@ cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify-launcher -- --uri="spotify:playlist:37i9dQZF1E35Ag8qP76jT0" &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
+
+# Need to set the minimize on close setting in spotify settings
 xdotool search --onlyvisible --name spotify windowquit
 sleep 1
 xdotool search --onlyvisible --name spotify windowquit
