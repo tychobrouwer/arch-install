@@ -59,12 +59,14 @@ sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt mitigations=off tsc=r
 sudo sed -i '/DefaultTimeoutStopSec/c\DefaultTimeoutStopSec=10s' /etc/systemd/system.conf
 sudo sed -i '/DefaultDeviceTimeoutSec/c\DefaultDeviceTimeoutSec=10s' /etc/systemd/system.conf
 
+sudo sed -i '/SystemMaxUse=/c\SystemMaxUse=500M' /etc/systemd/journald.confR 
+
 echo "-------------------------------------------------"
 echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk filelight --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk --noconfirm
 
 # Install paru
 if ! command -v paru &> /dev/null
