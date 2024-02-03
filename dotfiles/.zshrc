@@ -14,14 +14,13 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-export HISTCONTROL=erasedups:ignoredups:ignorespace
-
 # Oh My Zsh configuration
 export ZSH="$HOME/Projects/oh-my-zsh"
 ZSH_THEME="candy"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
+export HISTCONTROL=erasedups:ignoredups:ignorespace
 CASE_SENSITIVE="true"
 PATH="$PATH:$HOME/.local/bin"
 
@@ -44,8 +43,8 @@ alias pacman-autoremove='sudo pacman -Rns $(pacman -Qtdq) && paru -Sccy --noconf
 
 alias clear='clear && echo && neofetch --config $HOME/.config/neofetch/config-short.conf --ascii_distro arch_small'
 
-alias tree='tree -CAhF --dirsfirst'
-alias treed='tree -CAFd'
+alias tree='tree -CAhF -L 3 --dirsfirst'
+alias treed='tree -CAFd -L 3'
 
 # Set default libvirt URI to the system one
 export LIBVIRT_DEFAULT_URI='qemu:///system'

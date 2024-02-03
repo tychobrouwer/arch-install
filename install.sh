@@ -59,14 +59,19 @@ sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt mitigations=off tsc=r
 sudo sed -i '/DefaultTimeoutStopSec/c\DefaultTimeoutStopSec=10s' /etc/systemd/system.conf
 sudo sed -i '/DefaultDeviceTimeoutSec/c\DefaultDeviceTimeoutSec=10s' /etc/systemd/system.conf
 
-sudo sed -i '/SystemMaxUse=/c\SystemMaxUse=500M' /etc/systemd/journald.confR 
+sudo sed -i '/SystemMaxUse=/c\SystemMaxUse=500M' /etc/systemd/journald.conf
 
 echo "-------------------------------------------------"
 echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk docker tldr pacman-contrib	--noconfirm
+
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
+sudo groupadd docker
+sudo usermod -aG docker "$USER"
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -80,7 +85,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin gtk3-nocsd-git --noconfirm --skipreview
+paru -Suy --needed visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin gtk3-nocsd-git android-studio --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -220,7 +225,7 @@ echo "-------------------------------------------------"
 echo "-------------INSTALL PIP PACKAGES----------------"
 echo "-------------------------------------------------"
 
-pip install --user ansible
+pip install --user ansible molecule ansible-lint
 
 # Enable and start sshd
 echo "-------------------------------------------------"
@@ -494,7 +499,7 @@ then
 
   mkdir -p "$HOME/.steam/root/compatibilitytools.d"
 
-  wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-25/GE-Proton8-25.tar.gz -O /tmp/GE-Proton.tar.gz
+  wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-30/GE-Proton8-30.tar.gz -O /tmp/GE-Proton.tar.gz
 
   tar -xf /tmp/GE-Proton.tar.gz -C "$HOME/.steam/root/compatibilitytools.d"
   rm /tmp/GE-Proton.tar.gz
@@ -547,7 +552,10 @@ sudo setfacl -R -b /var/lib/libvirt/isos
 sudo setfacl -R -m u:$USER:rwX /var/lib/libvirt/isos
 sudo setfacl -m d:u:$USER:rwx /var/lib/libvirt/isos
 
-wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/libvirt/isos/virtio-win.iso
+if [ ! -f "/var/lib/libvirt/isos/virtio-win.iso" ]
+then
+  wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/libvirt/isos/virtio-win.iso
+fi
 
 # Apply customizations
 echo "-------------------------------------------------"
@@ -641,6 +649,10 @@ application_desktop_files=(
   "/usr/share/applications/qv4l2.desktop"
   "/usr/share/applications/xterm.desktop"
   "/usr/share/applications/org.kde.plasma-welcome.desktop"
+  "/usr/share/applications/jshell-java-openjdk.desktop"
+  "/usr/share/applications/jconsole-java-openjdk.desktop"
+  "/usr/share/applications/jshell-java11-openjdk.desktop"
+  "/usr/share/applications/jconsole-java11-openjdk.desktop"
   "$HOME/.local/share/applications/mw-matlab.desktop"
   "$HOME/.local/share/applications/mw-matlabconnector.desktop"
   "$HOME/.local/share/applications/mw-simulink.desktop"
