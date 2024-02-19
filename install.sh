@@ -24,6 +24,9 @@ echo "-------------------------------------------------"
 # Set parallel downloads pacman
 sudo sed -i '/ParallelDownloads/c\ParallelDownloads = 20' /etc/pacman.conf
 
+# Set mkpkg parallel jobs
+sudo sed -i '/MAKEFLAGS=/c\MAKEFLAGS="-j$(nproc)"' /etc/makepkg.conf
+
 # Create pacman hook for systemd-boot
 sudo mkdir -p /etc/pacman.d/hooks
 sudo bash -c "cat <<EOF > /etc/pacman.d/hooks/95-systemd-boot.hook
@@ -50,12 +53,25 @@ sudo sed -i 's/fsck//' /etc/mkinitcpio.conf
 
 sudo systemctl mask systemd-fsck-root.service
 
+sudo sed -i '/options.*btrfs$/s/$/ intel_iommu=on iommu=pt mitigations=off tsc=reliable clocksource=tsc/' /boot/loader/entries/*linux-zen.conf
+
+# Set systemd timeouts
+sudo sed -i '/DefaultTimeoutStopSec/c\DefaultTimeoutStopSec=10s' /etc/systemd/system.conf
+sudo sed -i '/DefaultDeviceTimeoutSec/c\DefaultDeviceTimeoutSec=10s' /etc/systemd/system.conf
+
+sudo sed -i '/SystemMaxUse=/c\SystemMaxUse=500M' /etc/systemd/journald.conf
+
 echo "-------------------------------------------------"
 echo "-----------------INSTALL PACKAGES----------------"
 echo "-------------------------------------------------"
 
 # Install packages
-sudo pacman -Suy --needed git waybar lm_sensors otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvconf kde-gtk-config ntfs-3g duf bluez-utils chntpw ufw virt-manager virt-viewer qemu-desktop bridge-utils libguestfs powertop --noconfirm
+sudo pacman -Suy --needed git waybar lm_sensors tree otf-font-awesome ttc-iosevka-ss15 ttf-jetbrains-mono zsh openssh lib32-systemd steam neofetch gimp qbittorrent less curl wget python-pip playerctl xdotool wireguard-tools jq inkscape xorg-xwayland ydotool base-devel partitionmanager firefox timeshift systemd-resolvsystemd-resolvconfconf kde-gtk-config ntfs-3g duf bluez-utils chntpw firewalld virt-manager virt-viewer qemu-desktop iptables-nft dnsmasq swtpm powertop torbrowser-launcher trash-cli nodejs npm spectacle kcolorchooser man-pages-uk docker tldr pacman-contrib	--noconfirm
+
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
+sudo groupadd docker
+sudo usermod -aG docker "$USER"
 
 # Install paru
 if ! command -v paru &> /dev/null
@@ -69,7 +85,7 @@ then
 fi
 
 # Install paru packages
-paru -Suy --needed thorium-browser-bin visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin gtk3-nocsd-git google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter --noconfirm --skipreview
+paru -Suy --needed visual-studio-code-bin mailspring nordvpn-bin spotify-launcher jellyfin-media-player kopia-ui-bin arduino-ide-bin google-chrome minecraft-launcher teams-for-linux-bin ttf-ms-win10-cdn isoimagewriter brave-bin gtk3-nocsd-git android-studio --noconfirm --skipreview
 
 # Install oh-my-zsh
 echo "-------------------------------------------------"
@@ -106,9 +122,11 @@ cat << EOF > "$HOME/.scripts/waybar-spotify.sh"
 #!/bin/bash
 spotify-launcher -- --uri="spotify:playlist:37i9dQZF1E35Ag8qP76jT0" &
 while [[ ! \$(xdotool search --onlyvisible --name spotify) ]]; do :; done
-xdotool search --onlyvisible --name spotify windowminimize
+
+# Need to set the minimize on close setting in spotify settings
+xdotool search --onlyvisible --name spotify windowquit
 sleep 1
-xdotool search --onlyvisible --name spotify windowminimize
+xdotool search --onlyvisible --name spotify windowquit
 EOF
 sudo chmod +x "$HOME/.scripts/waybar-spotify.sh"
 
@@ -122,14 +140,14 @@ systemctl --user start ydotool.service
 sudo chmod +x "/etc/xdg/waybar/virt-desktop-checker.sh"
 sudo chmod +x "/etc/xdg/waybar/power-usage.sh"
 
-cat << EOF > "$HOME/.config/autostart/spotify-qt.desktop"
+cat << EOF > "$HOME/.config/autostart/spotify.desktop"
 [Desktop Entry]
 Categories=Audio;Music;Player;AudioVideo;
-Comment=Lightweight Spotify client using Qt
-Exec=$HOME/.scripts/waybar-spotify.sh
+Comment=Spotify client
+Exec=/home/me/.scripts/waybar-spotify.sh
 GenericName=Music Player
-Icon=spotify-qt
-Name=spotify-qt
+Icon=spotify
+Name=spotify
 Terminal=false
 Type=Application
 EOF
@@ -174,7 +192,7 @@ HaltCommand=/usr/bin/systemctl poweroff
 RebootCommand=/usr/bin/systemctl reboot
 
 [Theme]
-Current=my-theme
+Current=breeze-dark-custom
 CursorTheme=breeze_cursors
 Font=Noto Sans,10,-1,5,50,0,0,0,0,0
 
@@ -199,6 +217,15 @@ cp -sf "$dotfilesdir/.directory-dolphin" "$HOME/.local/share/dolphin/view_proper
 cp -sf "$dotfilesdir/kscreenlockerrc" "$HOME/.config/kscreenlockerrc"
 mkdir -p "$HOME/.config/pip"
 cp -sf "$dotfilesdir/pip.conf" "$HOME/.config/pip/pip.conf"
+cp -sf "$dotfilesdir/pip.conf" "root/.config/pip/pip.conf"
+mkdir -p "$HOME/.config/neofetch"
+cp -f "$dotfilesdir/neofetch-short.conf" "$HOME/.config/neofetch/config-short.conf"
+
+echo "-------------------------------------------------"
+echo "-------------INSTALL PIP PACKAGES----------------"
+echo "-------------------------------------------------"
+
+pip install --user ansible molecule ansible-lint
 
 # Enable and start sshd
 echo "-------------------------------------------------"
@@ -276,6 +303,18 @@ then
   sudo bash -c "cat << EOF > /etc/tlp.conf
 START_CHARGE_THRESH_BAT0=70
 STOP_CHARGE_THRESH_BAT0=80
+RESTORE_THRESHOLDS_ON_BAT=1
+
+PCIE_ASPM_ON_BAT=powersave
+
+CPU_SCALING_GOVERNOR_ON_BAT=powersave
+CPU_ENERGY_PERF_POLICY_ON_BAT=balance_power
+CPU_MIN_PERF_ON_BAT=0
+CPU_MAX_PERF_ON_BAT=30
+CPU_BOOST_ON_BAT=0
+CPU_HWP_DYN_BOOST_ON_BAT=0
+
+PLATFORM_PROFILE_ON_BAT=low-power
 EOF"
 
   sudo systemctl enable tlp.service
@@ -317,10 +356,10 @@ then
 
   paru -Sy --needed nvidia-prime-rtd3pm --noconfirm
 
-  sudo sed -i 's/MODULES=(/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm /g' /etc/mkinitcpio.conf
+  sudo sed -i 's/MODULES=(btrfs/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm btrfs/g' /etc/mkinitcpio.conf
   sudo sed -i 's/kms //g' /etc/mkinitcpio.conf
 
-  sudo sed -i '/options/ s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*linux-zen.conf
+  sudo sed -i '/options.*iommu=pt$/s/$/ nvidia-drm.modeset=1/' /boot/loader/entries/*linux-zen.conf
 
   sudo bash -c "cat << EOF > /etc/pacman.d/hooks/nvidia.hook
 [Trigger]
@@ -381,7 +420,7 @@ EOF"
   sudo bash -c "cat << EOF > /etc/systemd/system/$smb_name.mount
 [Unit]
 Description=$smb_description
-RequiresMountsFor=/mnt
+RequiresMountsFor=${smb_source%/*}
 Requires=network-online.target wg-quick@wg0.service
 After=network-online.target wg-quick@wg0.service
 
@@ -390,8 +429,9 @@ What=$smb_source
 Where=$smb_destination
 Type=cifs
 Options=uid=me,gid=me,_netdev,nofail,credentials=/etc/cifspasswd$i
-TimeoutSec=10
+TimeoutSec=5
 LazyUnmount=yes
+ForceUnmount=yes
 
 [Install]
 WantedBy=multi-user.target
@@ -459,7 +499,7 @@ then
 
   mkdir -p "$HOME/.steam/root/compatibilitytools.d"
 
-  wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-25/GE-Proton8-25.tar.gz -O /tmp/GE-Proton.tar.gz
+  wget https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-30/GE-Proton8-30.tar.gz -O /tmp/GE-Proton.tar.gz
 
   tar -xf /tmp/GE-Proton.tar.gz -C "$HOME/.steam/root/compatibilitytools.d"
   rm /tmp/GE-Proton.tar.gz
@@ -495,9 +535,27 @@ echo "-------------------------------------------------"
 
 sudo systemctl enable libvirtd.service
 sudo systemctl start libvirtd.service
+sudo systemctl enable virtlogd.socket
+sudo systemctl start virtlogd.socket
+
+sudo virsh net-autostart default
+sudo virsh net-start default
 
 sudo usermod -aG "$USER" libvirt
 
+sudo mkdir -p /var/lib/libvirt/isos
+
+sudo setfacl -R -b /var/lib/libvirt/images
+sudo setfacl -R -m u:$USER:rwX /var/lib/libvirt/images
+sudo setfacl -m d:u:$USER:rwx /var/lib/libvirt/images
+sudo setfacl -R -b /var/lib/libvirt/isos
+sudo setfacl -R -m u:$USER:rwX /var/lib/libvirt/isos
+sudo setfacl -m d:u:$USER:rwx /var/lib/libvirt/isos
+
+if [ ! -f "/var/lib/libvirt/isos/virtio-win.iso" ]
+then
+  wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/libvirt/isos/virtio-win.iso
+fi
 
 # Apply customizations
 echo "-------------------------------------------------"
@@ -505,7 +563,11 @@ echo "---------------APPLY CUSTOMIZATIONS--------------"
 echo "-------------------------------------------------"
 
 # Configure gtk apps to use gtk3-nocsd
-gtk_apps=(net.lutris.Lutris.desktop)
+gtk_apps=(
+  net.lutris.Lutris.desktop
+  torbrowser.desktop
+)
+
 for app in "${gtk_apps[@]}"
 do
   [ ! -f "/usr/share/applications/$app" ] && continue
@@ -580,11 +642,20 @@ application_desktop_files=(
   "/usr/share/applications/jshell-java11-openjdk.desktop"
   "/usr/share/applications/nm-connection-editor.desktop"
   "/usr/share/applications/uxterm.desktop"
+  "/usr/share/applications/xterm.desktop"
   "/usr/share/applications/nvtop.desktop"
   "/usr/share/applications/htop.desktop"
-  "/home/me/.local/share/applications/mw-matlab.desktop"
-  "/home/me/.local/share/applications/mw-matlabconnector.desktop"
-  "/home/me/.local/share/applications/mw-simulink.desktop"
+  "/usr/share/applications/qvidcap.desktop"
+  "/usr/share/applications/qv4l2.desktop"
+  "/usr/share/applications/xterm.desktop"
+  "/usr/share/applications/org.kde.plasma-welcome.desktop"
+  "/usr/share/applications/jshell-java-openjdk.desktop"
+  "/usr/share/applications/jconsole-java-openjdk.desktop"
+  "/usr/share/applications/jshell-java11-openjdk.desktop"
+  "/usr/share/applications/jconsole-java11-openjdk.desktop"
+  "$HOME/.local/share/applications/mw-matlab.desktop"
+  "$HOME/.local/share/applications/mw-matlabconnector.desktop"
+  "$HOME/.local/share/applications/mw-simulink.desktop"
 )
 
 for desktop_file in "${application_desktop_files[@]}"
@@ -592,6 +663,22 @@ do
   [ ! -f "$desktop_file" ] && continue
   
   sudo bash -c "grep -q NoDisplay= $desktop_file && sed -i 's/NoDisplay=/NoDisplay=true/' $desktop_file || echo 'NoDisplay=true' >> $desktop_file"
+done
+
+# Set wayland for some electron/chromium applicaions
+wayland_application_desktop_files=(
+  "/usr/share/applications/brave-browser.desktop"
+  "/usr/share/applications/Mailspring.desktop"
+  "$HOME/.config/autostart/Mailspring.desktop"
+)
+
+wayland_enable_string="--enable-features=WaylandWindowDecorations --ozone-platform-hint=auto  --enable-gpu-rasterization --ignore-gpu-blocklist --use-gl=desktop"
+
+for desktop_file in "${wayland_application_desktop_files[@]}"
+do
+  [ ! -f "$desktop_file" ] && continue  
+  
+  sudo bash -c "sed -i ''/$wayland_enable_string/b; s/Exec=\(\S*\)\( \)\{0,1\}\(.*\)/Exec=\1 $wayland_enable_string \3/'' $desktop_file"
 done
 
 # Add git folders 
@@ -627,3 +714,52 @@ echo "-------------------------------------------------"
 # fix kopia tray icon
 
 sudo cp -f "$current_dir/icons/kopia-tray.png" "/opt/KopiaUI/resources/icons/kopia-tray.png"
+
+# Setup developer tools
+
+echo "-------------------------------------------------"
+echo "-----------------SETUP DEVELOPER TOOLS-----------"
+echo "-------------------------------------------------"
+
+mkdir -p "$HOME/DevTools"
+
+# Install FlutterSDK
+
+install_flutter=$( jq -r ".install_flutter" "$config_file" )
+
+if [ $install_flutter == true ]
+then
+  sudo pacman -Sy --needed clang ninja --noconfirm
+
+  sudo ln -s /usr/bin/google-chrome-stable /usr/bin/google-chrome
+
+  wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.16.5-stable.tar.xz -O /tmp/flutter.tar.xz
+
+  tar -xf /tmp/flutter.tar.xz -C "$HOME/DevTools"
+  rm /tmp/flutter.tar.xz
+
+  flutter config --enable-linux-desktop
+  flutter config --enable-web
+  flutter config --enable-windows-desktop
+  flutter config --no-enable-macos-desktop
+  flutter config --no-enable-ios
+  flutter config --no-enable-android
+  flutter config --no-analytics
+
+  flutter precache
+fi
+
+# Install elm
+
+install_elm=$( jq -r ".install_elm" "$config_file" )
+
+if [ $install_elm == true ]
+then
+  wget https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz -O /tmp/elm.gz
+
+  gunzip /tmp/elm.gz
+  chmod +x /tmp/elm
+  sudo mv /tmp/elm /usr/local/bin/elm
+
+  rm /tmp/elm.gz
+fi

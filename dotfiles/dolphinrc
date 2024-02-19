@@ -14,7 +14,7 @@ ShowViewMode=false
 [DetailsMode]
 ExpandableFolders=false
 IconSize=22
-PreviewSize=22
+PreviewSize=16
 
 [General]
 ConfirmClosingMultipleTabs=false
@@ -39,6 +39,10 @@ Places Icons Static Size=22
 1280x800 screen: Width=466
 1536x864 screen: Height=532
 1536x864 screen: Width=438
+1920x1080 screen: Height=444
+1920x1080 screen: Width=371
+2 screens: Height=458
+2 screens: Width=387
 2358x1280 screen: Height=532
 2358x1280 screen: Width=440
 
@@ -47,4 +51,4 @@ MenuBar=Disabled
 ToolBarsMovable=Disabled
 
 [PreviewSettings]
-Plugins=appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail
+Plugins=appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail
