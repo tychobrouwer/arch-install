@@ -2,5 +2,5 @@
 update_info=kscreenlocker.upd:0.1-autolock
 
 [Greeter][Wallpaper][org.kde.image][General]
-Image=/usr/share/wallpapers/my-theme/content/images/background.jpg
-PreviewImage=/usr/share/wallpapers/my-theme/content/images/background.jpg
+Image=/usr/share/wallpapers/breeze-dark-custom/content/images/background.jpg
+PreviewImage=/usr/share/wallpapers/breeze-dark-custom/content/images/background.jpg
